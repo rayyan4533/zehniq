@@ -1,2 +1,63 @@
 // use prisma-8
 // Contract inferred from the live database schema. Edit as needed, then run `prisma contract emit`.
+
+model User {
+  id            String            @id(map: "user_pkey")
+  name          String
+  email         String            @unique(map: "user_email_key")
+  emailVerified Boolean
+  image         String?
+  createdAt     TimestamptzString @default(now())
+  updatedAt     TimestamptzString @default(now())
+  accounts      Account[]
+  sessions      Session[]
+
+  @@map("user")
+}
+
+model Account {
+  id                    String             @id(map: "account_pkey")
+  accountId             String
+  providerId            String
+  userId                String
+  accessToken           String?
+  refreshToken          String?
+  idToken               String?
+  accessTokenExpiresAt  TimestamptzString?
+  refreshTokenExpiresAt TimestamptzString?
+  scope                 String?
+  password              String?
+  createdAt             TimestamptzString  @default(now())
+  updatedAt             TimestamptzString
+  user                  User               @relation(fields: [userId], references: [id], onDelete: Cascade, map: "account_userId_fkey")
+
+  @@index([userId], map: "account_userId_idx")
+  @@map("account")
+}
+
+model Session {
+  id        String            @id(map: "session_pkey")
+  expiresAt TimestamptzString
+  token     String            @unique(map: "session_token_key")
+  createdAt TimestamptzString @default(now())
+  updatedAt TimestamptzString
+  ipAddress String?
+  userAgent String?
+  userId    String
+  user      User              @relation(fields: [userId], references: [id], onDelete: Cascade, map: "session_userId_fkey")
+
+  @@index([userId], map: "session_userId_idx")
+  @@map("session")
+}
+
+model Verification {
+  id         String            @id(map: "verification_pkey")
+  identifier String
+  value      String
+  expiresAt  TimestamptzString
+  createdAt  TimestamptzString @default(now())
+  updatedAt  TimestamptzString @default(now())
+
+  @@index([identifier], map: "verification_identifier_idx")
+  @@map("verification")
+}
