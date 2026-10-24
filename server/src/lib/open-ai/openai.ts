@@ -3,7 +3,7 @@ import {
     CHAT_MODEL,
     EMBEDDING_DIMENSIONS,
     EMBEDDING_MODEL,
-} from "../ai-config/ai-config";
+} from "../ai-config/ai-config.js";
 
 let client: OpenAI | null = null;
 

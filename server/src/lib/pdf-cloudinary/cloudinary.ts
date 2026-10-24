@@ -1,6 +1,6 @@
 
 import { v2 as cloudinary } from "cloudinary";
-import { ValidationError } from "../../types/app-error";
+import { ValidationError } from "../../types/app-error.js";
 
 const cloudName = process.env.CLOUDINARY_CLOUD_NAME;
 const uploadPreset = process.env.CLOUDINARY_UPLOAD_PRESET;

@@ -12,6 +12,7 @@ import {
 import { workspaceIdParamSchema } from "../workspace/workspace.validator.js";
 import {
     bulkDeleteSourcesForWorkspace,
+    retrySourceForWorkspace,
     createTextOrMarkdownSource,
     deleteSourceForWorkspace,
     getSourceForWorkspace,
@@ -95,6 +96,12 @@ export async function listSources(req: Request, res: Response) {
         filters,
     );
     res.json(sources);
+}
+
+export async function retrySource(req: Request, res: Response) {
+    const { workspaceId, sourceId } = sourceIdParamSchema.parse(req.params);
+    const result = await retrySourceForWorkspace(workspaceId, sourceId, req.session.user.id);
+    res.status(202).json(result);
 }
 
 export async function getSource(req: Request, res: Response) {

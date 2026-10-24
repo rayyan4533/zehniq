@@ -1,3 +1,5 @@
+import type { Scalars } from "@prisma/orm-postgres/family-contract/types";
+import type { Models } from "../../prisma/contract.d.js";
 import { db } from "../../prisma/db.js";
 
 export const sourceChunkSelect = {
@@ -10,22 +12,14 @@ export const sourceChunkSelect = {
     createdAt: true,
 } as const;
 
-export type SourceChunkRecord = {
-    id: string;
-    sourceId: string;
-    index: number;
-    content: string;
-    tokenCount: number | null;
-    metadata: any;
-    createdAt: Date;
-};
+export type SourceChunkRecord = Scalars<Models.public_SourceChunk>;
 
 export type CreateSourceChunkData = {
     sourceId: string;
     index: number;
     content: string;
     tokenCount?: number | null;
-    metadata?: any;
+    metadata?: SourceChunkRecord["metadata"];
 };
 
 export async function deleteChunksBySourceId(sourceId: string) {
@@ -65,7 +59,7 @@ export async function createSourceChunks(
                         ? { metadata: chunk.metadata }
                         : {}),
                 });
-            createdChunks.push(row as SourceChunkRecord);
+            createdChunks.push(row);
         }
         return createdChunks;
     });
@@ -88,5 +82,5 @@ export async function findChunksBySourceId(
         .orderBy((c) => c.index.asc())
         .all();
 
-    return rows as SourceChunkRecord[];
+    return rows;
 }

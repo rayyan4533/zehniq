@@ -1,8 +1,12 @@
+import type { Models } from "../../prisma/contract.d.js";
+
+type ChunkMetadata = Exclude<Models.public_SourceChunk["metadata"], null>;
+
 
 export type TextChunk = {
     index: number;
     content: string;
-    metadata?: Record<string, unknown> | undefined;
+    metadata?: ChunkMetadata | undefined;
 };
 
 /** Default maximum characters per chunk when no option is passed. */
@@ -117,7 +121,7 @@ export function chunkText(
     options: {
         chunkSize?: number;
         chunkOverlap?: number;
-        metadata?: Record<string, unknown> | undefined;
+        metadata?: ChunkMetadata | undefined;
     } = {},
 ): TextChunk[] {
     const chunkSize = options.chunkSize ?? DEFAULT_CHUNK_SIZE;

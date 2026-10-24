@@ -1,4 +1,7 @@
+import type { Scalars } from "@prisma/orm-postgres/family-contract/types";
+import type { Models } from "../../prisma/contract.d.js";
 import { or } from "@prisma/orm-postgres/orm-client";
+import { NotFoundError } from "../../types/app-error.js";
 import { db } from "../../prisma/db.js";
 import type { ListSourcesQuery } from "./source.validator.js";
 
@@ -18,18 +21,7 @@ export const sourceSelect = {
 export type SourceType = "PDF" | "WEBSITE" | "YOUTUBE" | "TEXT" | "MARKDOWN";
 export type SourceStatus = "PENDING" | "PROCESSING" | "READY" | "FAILED";
 
-export type SourceRecord = {
-    id: string;
-    workspaceId: string;
-    type: SourceType;
-    title: string;
-    content: string | null;
-    url: string | null;
-    status: SourceStatus;
-    metadata: any;
-    createdAt: Date;
-    updatedAt: Date;
-};
+export type SourceRecord = Scalars<Models.public_Source>;
 
 export type CreateSourceData = {
     workspaceId: string;
@@ -38,13 +30,13 @@ export type CreateSourceData = {
     content?: string | null;
     url?: string | null;
     status?: SourceStatus;
-    metadata?: any;
+    metadata?: SourceRecord["metadata"];
 };
 
 export type UpdateSourceData = {
     content?: string | null;
     status?: SourceStatus;
-    metadata?: any;
+    metadata?: SourceRecord["metadata"];
 };
 
 export async function createSourceRecord(data: CreateSourceData): Promise<SourceRecord> {
@@ -71,7 +63,7 @@ export async function createSourceRecord(data: CreateSourceData): Promise<Source
             ...(data.metadata !== undefined ? { metadata: data.metadata } : {}),
         });
 
-    return row as SourceRecord;
+    return row;
 }
 
 export async function findSourcesByWorkspaceId(
@@ -107,7 +99,7 @@ export async function findSourcesByWorkspaceId(
     }
 
     const rows = await query.orderBy((s) => s.createdAt.desc()).all();
-    return rows as SourceRecord[];
+    return rows;
 }
 
 export async function findSourceByIdAndWorkspaceId(
@@ -130,7 +122,7 @@ export async function findSourceByIdAndWorkspaceId(
         )
         .first();
 
-    return row as SourceRecord | null;
+    return row;
 }
 
 export async function findSourceById(sourceId: string): Promise<SourceRecord | null> {
@@ -150,14 +142,14 @@ export async function findSourceById(sourceId: string): Promise<SourceRecord | n
         )
         .first();
 
-    return row as SourceRecord | null;
+    return row;
 }
 
 export async function updateSourceRecord(
     sourceId: string,
     data: UpdateSourceData,
 ): Promise<SourceRecord> {
-    const updatePayload: Record<string, unknown> = {};
+    const updatePayload: UpdateSourceData = {};
     if (data.content !== undefined) updatePayload.content = data.content;
     if (data.status !== undefined) updatePayload.status = data.status;
     if (data.metadata !== undefined) updatePayload.metadata = data.metadata;
@@ -176,9 +168,10 @@ export async function updateSourceRecord(
             "createdAt",
             "updatedAt",
         )
-        .update(updatePayload as any);
+        .update(updatePayload);
 
-    return row as SourceRecord;
+    if (!row) throw new NotFoundError("Source not found");
+    return row;
 }
 
 export async function deleteSourceRecord(sourceId: string): Promise<void> {

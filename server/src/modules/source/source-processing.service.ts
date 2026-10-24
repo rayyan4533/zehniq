@@ -111,11 +111,13 @@ export async function extractSourceContent(sourceId: string) {
             ? (source.metadata as SourceMetadata)
             : {};
 
+    const pageCount = extracted.pageCount ?? metadata.pageCount;
+
     await updateSourceRecord(sourceId, {
         content: extracted.text,
         metadata: {
             ...metadata,
-            pageCount: extracted.pageCount ?? metadata.pageCount,
+            ...(pageCount !== undefined ? { pageCount } : {}),
         },
     });
 
@@ -147,7 +149,7 @@ export async function chunkSourceContent(
             index: chunk.index,
             content: chunk.content,
             tokenCount: Math.ceil(chunk.content.length / 4),
-            metadata: chunk.metadata as any,
+            ...(chunk.metadata !== undefined ? { metadata: chunk.metadata } : {}),
         })),
     );
 }
@@ -228,6 +230,8 @@ export async function embedAndIndexSource(
         }
     }
 
+    // A retry creates new chunk IDs; remove vectors from earlier attempts first.
+    await deleteSourceVectors(source.workspaceId, source.id);
     await upsertSourceVectors(source.workspaceId, records);
 
     const metadata =
@@ -237,13 +241,14 @@ export async function embedAndIndexSource(
             ? (source.metadata as SourceMetadata)
             : {};
 
+    const { processingError: _processingError, ...readyMetadata } = metadata;
+
     return updateSourceRecord(source.id, {
         status: "READY",
         metadata: {
-            ...metadata,
+            ...readyMetadata,
             chunkCount: chunks.length,
             indexedAt: new Date().toISOString(),
-            processingError: undefined,
         },
     });
 }

@@ -1,5 +1,5 @@
 import { uploadPdfToCloudinary } from "../../lib/pdf-cloudinary/cloudinary.js";
-import { scrapeWebsite } from "../../lib/website-renaming-tool/firecrawl.js";
+import { scrapeWebsite } from "../../lib/website-scrape-tool/firecrawl.js";
 import { extractPdfFromBuffer } from "../../lib/pdf-cloudinary/pdf.js";
 import { enqueueSourceProcessing } from "./source.events.js";
 import { fetchYoutubeTranscript } from "../../lib/npm-yt-transcript/youtube.js";
@@ -10,12 +10,22 @@ import {
     findSourcesByWorkspaceId,
     type SourceRecord,
 } from "./source.repo.js";
-import { NotFoundError } from "../../types/app-error.js";
+import { ConflictError, NotFoundError } from "../../types/app-error.js";
+import { removeSourceFromIndex } from "./source-processing.service.js";
 import type { CreateSourceInput, ImportWebsiteInput, ImportYoutubeInput, ListSourcesQuery } from "./source.validator.js";
 import { getWorkspaceByIdForUser } from "../workspace/workspace.service.js";
 
 async function assertWorkspaceAccess(workspaceId: string, userId: string) {
     await getWorkspaceByIdForUser(workspaceId, userId);
+}
+
+export async function retrySourceForWorkspace(workspaceId: string, sourceId: string, userId: string) {
+    const source = await getSourceForWorkspace(workspaceId, sourceId, userId);
+    if (source.status !== "FAILED") {
+        throw new ConflictError("Only failed sources can be retried");
+    }
+    await enqueueSourceProcessing({ sourceId, workspaceId });
+    return { sourceId, status: "QUEUED" as const };
 }
 
 async function createAndProcessSource(
@@ -63,6 +73,7 @@ export async function deleteSourceForWorkspace(
     userId: string,
 ) {
     await getSourceForWorkspace(workspaceId, sourceId, userId);
+    await removeSourceFromIndex(workspaceId, sourceId);
     await deleteSourceRecord(sourceId);
 }
 
@@ -153,7 +164,7 @@ export async function uploadPdfSource(
             fileSize: upload.bytes,
             publicId: upload.publicId,
             resourceType: upload.resourceType,
-            pageCount,
+            ...(pageCount !== undefined ? { pageCount } : {}),
         },
     });
 }

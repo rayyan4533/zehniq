@@ -2,6 +2,7 @@ import { Router } from "express";
 import { asyncHandler } from "../../utils/async-handler.js";
 import {
     bulkDeleteSources,
+    retrySource,
     createSource,
     deleteSource,
     getSource,
@@ -25,4 +26,5 @@ sourceRoutes.get("/", asyncHandler(listSources));
 sourceRoutes.post("/", asyncHandler(createSource));
 sourceRoutes.post("/bulk-delete", asyncHandler(bulkDeleteSources));
 sourceRoutes.get("/:sourceId", asyncHandler(getSource));
+sourceRoutes.post("/:sourceId/retry", asyncHandler(retrySource));
 sourceRoutes.delete("/:sourceId", asyncHandler(deleteSource));

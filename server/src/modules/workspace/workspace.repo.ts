@@ -1,18 +1,12 @@
+import type { Scalars } from "@prisma/orm-postgres/family-contract/types";
+import type { Models } from "../../prisma/contract.d.js";
 import { db } from "../../prisma/db.js";
 import type {
     CreateWorkspaceInput,
     UpdateWorkspaceInput,
 } from "./workspace.validator.js";
 
-export type WorkspaceRecord = {
-    id: string;
-    title: string;
-    description: string | null;
-    icon: string | null;
-    defaultModel: string;
-    createdAt: Date;
-    updatedAt: Date;
-};
+export type WorkspaceRecord = Omit<Scalars<Models.public_Workspace>, "userId">;
 
 export async function findWorkspacesByUserId(userId: string) {
     return await db.orm.public.Workspace

@@ -8,8 +8,18 @@ export function errorHandler(
     error: unknown,
     _req: Request,
     res: Response,
-    _next: NextFunction,
+    next: NextFunction,
 ): void {
+    if (res.headersSent) {
+        next(error);
+        return;
+    }
+
+    if (error instanceof SyntaxError && "status" in error && error.status === 400) {
+        res.status(400).json({ error: "Invalid JSON body" });
+        return;
+    }
+
     if (error instanceof AppError) {
         res.status(error.statusCode).json({
             error: error.message,
