@@ -18,9 +18,9 @@ import type {
 } from '@prisma/orm-postgres/contract/types';
 
 export type StorageHash =
-  StorageHashBase<'12ea62d85fb6cb13bc29d975918d43f4a8b15e8f7c377579ae28a3064ae16da1'>;
+  StorageHashBase<'f4979764c963546a04b08b4c003a0df7d1ef39926e1d64f9f81a45040cb98549'>;
 export type ExecutionHash =
-  ExecutionHashBase<'1c5478c038c37c7530d86c475519c8f814151e6470d4ca647732a361dacee963'>;
+  ExecutionHashBase<'6fd309255899b773e086e2dc52041bbd2bf9b2da3e4951c93691e437ac12824e'>;
 export type ProfileHash =
   ProfileHashBase<'3916f444a8a17ad749191acf9e08dad97d1a327b88c2f1d45d12f240296aa8b2'>;
 
@@ -271,6 +271,23 @@ export type FieldOutputTypes = {
       readonly updatedAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
       readonly workspaceId: CodecTypes['pg/text@1']['output'];
     };
+    readonly LearningRoadmap: {
+      readonly analysis: CodecTypes['pg/json@1']['output'] | null;
+      readonly collectionId: CodecTypes['pg/text@1']['output'] | null;
+      readonly content: CodecTypes['pg/json@1']['output'] | null;
+      readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
+      readonly durationMonths: CodecTypes['pg/int4@1']['output'];
+      readonly generationError: CodecTypes['pg/text@1']['output'] | null;
+      readonly id: CodecTypes['pg/text@1']['output'];
+      readonly limitations: CodecTypes['pg/json@1']['output'] | null;
+      readonly phase: CodecTypes['pg/text@1']['output'];
+      readonly sourceIds: ReadonlyArray<CodecTypes['pg/text@1']['output']>;
+      readonly status: CodecTypes['pg/text@1']['output'];
+      readonly title: CodecTypes['pg/text@1']['output'];
+      readonly topicGoals: ReadonlyArray<CodecTypes['pg/text@1']['output']>;
+      readonly updatedAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
+      readonly workspaceId: CodecTypes['pg/text@1']['output'] | null;
+    };
     readonly Message: {
       readonly citations: CodecTypes['pg/json@1']['output'] | null;
       readonly content: CodecTypes['pg/text@1']['output'];
@@ -278,6 +295,29 @@ export type FieldOutputTypes = {
       readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
       readonly id: CodecTypes['pg/text@1']['output'];
       readonly role: 'USER' | 'ASSISTANT';
+    };
+    readonly RoadmapActivity: {
+      readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
+      readonly id: CodecTypes['pg/text@1']['output'];
+      readonly kind: CodecTypes['pg/text@1']['output'];
+      readonly resourceId: CodecTypes['pg/text@1']['output'] | null;
+      readonly roadmapId: CodecTypes['pg/text@1']['output'];
+      readonly taskId: CodecTypes['pg/text@1']['output'] | null;
+    };
+    readonly RoadmapCollection: {
+      readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
+      readonly id: CodecTypes['pg/text@1']['output'];
+      readonly title: CodecTypes['pg/text@1']['output'];
+      readonly updatedAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
+      readonly userId: CodecTypes['pg/text@1']['output'];
+    };
+    readonly RoadmapTaskProgress: {
+      readonly completedAt: CodecTypes['pg/timestamptz-temporal@1']['output'] | null;
+      readonly id: CodecTypes['pg/text@1']['output'];
+      readonly isCompleted: CodecTypes['pg/bool@1']['output'];
+      readonly roadmapId: CodecTypes['pg/text@1']['output'];
+      readonly taskId: CodecTypes['pg/text@1']['output'];
+      readonly updatedAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
     };
     readonly Session: {
       readonly createdAt: CodecTypes['pg/timestamptz-string@1']['output'];
@@ -290,6 +330,7 @@ export type FieldOutputTypes = {
       readonly userId: CodecTypes['pg/text@1']['output'];
     };
     readonly Source: {
+      readonly collectionId: CodecTypes['pg/text@1']['output'] | null;
       readonly content: CodecTypes['pg/text@1']['output'] | null;
       readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
       readonly id: CodecTypes['pg/text@1']['output'];
@@ -299,7 +340,7 @@ export type FieldOutputTypes = {
       readonly type: 'PDF' | 'WEBSITE' | 'YOUTUBE' | 'TEXT' | 'MARKDOWN';
       readonly updatedAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
       readonly url: CodecTypes['pg/text@1']['output'] | null;
-      readonly workspaceId: CodecTypes['pg/text@1']['output'];
+      readonly workspaceId: CodecTypes['pg/text@1']['output'] | null;
     };
     readonly SourceChunk: {
       readonly content: CodecTypes['pg/text@1']['output'];
@@ -378,6 +419,23 @@ export type FieldInputTypes = {
       readonly updatedAt: CodecTypes['pg/timestamptz-temporal@1']['input'];
       readonly workspaceId: CodecTypes['pg/text@1']['input'];
     };
+    readonly LearningRoadmap: {
+      readonly analysis: CodecTypes['pg/json@1']['input'] | null;
+      readonly collectionId: CodecTypes['pg/text@1']['input'] | null;
+      readonly content: CodecTypes['pg/json@1']['input'] | null;
+      readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['input'];
+      readonly durationMonths: CodecTypes['pg/int4@1']['input'];
+      readonly generationError: CodecTypes['pg/text@1']['input'] | null;
+      readonly id: CodecTypes['pg/text@1']['input'];
+      readonly limitations: CodecTypes['pg/json@1']['input'] | null;
+      readonly phase: CodecTypes['pg/text@1']['input'];
+      readonly sourceIds: ReadonlyArray<CodecTypes['pg/text@1']['input']>;
+      readonly status: CodecTypes['pg/text@1']['input'];
+      readonly title: CodecTypes['pg/text@1']['input'];
+      readonly topicGoals: ReadonlyArray<CodecTypes['pg/text@1']['input']>;
+      readonly updatedAt: CodecTypes['pg/timestamptz-temporal@1']['input'];
+      readonly workspaceId: CodecTypes['pg/text@1']['input'] | null;
+    };
     readonly Message: {
       readonly citations: CodecTypes['pg/json@1']['input'] | null;
       readonly content: CodecTypes['pg/text@1']['input'];
@@ -385,6 +443,29 @@ export type FieldInputTypes = {
       readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['input'];
       readonly id: CodecTypes['pg/text@1']['input'];
       readonly role: 'USER' | 'ASSISTANT';
+    };
+    readonly RoadmapActivity: {
+      readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['input'];
+      readonly id: CodecTypes['pg/text@1']['input'];
+      readonly kind: CodecTypes['pg/text@1']['input'];
+      readonly resourceId: CodecTypes['pg/text@1']['input'] | null;
+      readonly roadmapId: CodecTypes['pg/text@1']['input'];
+      readonly taskId: CodecTypes['pg/text@1']['input'] | null;
+    };
+    readonly RoadmapCollection: {
+      readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['input'];
+      readonly id: CodecTypes['pg/text@1']['input'];
+      readonly title: CodecTypes['pg/text@1']['input'];
+      readonly updatedAt: CodecTypes['pg/timestamptz-temporal@1']['input'];
+      readonly userId: CodecTypes['pg/text@1']['input'];
+    };
+    readonly RoadmapTaskProgress: {
+      readonly completedAt: CodecTypes['pg/timestamptz-temporal@1']['input'] | null;
+      readonly id: CodecTypes['pg/text@1']['input'];
+      readonly isCompleted: CodecTypes['pg/bool@1']['input'];
+      readonly roadmapId: CodecTypes['pg/text@1']['input'];
+      readonly taskId: CodecTypes['pg/text@1']['input'];
+      readonly updatedAt: CodecTypes['pg/timestamptz-temporal@1']['input'];
     };
     readonly Session: {
       readonly createdAt: CodecTypes['pg/timestamptz-string@1']['input'];
@@ -397,6 +478,7 @@ export type FieldInputTypes = {
       readonly userId: CodecTypes['pg/text@1']['input'];
     };
     readonly Source: {
+      readonly collectionId: CodecTypes['pg/text@1']['input'] | null;
       readonly content: CodecTypes['pg/text@1']['input'] | null;
       readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['input'];
       readonly id: CodecTypes['pg/text@1']['input'];
@@ -406,7 +488,7 @@ export type FieldInputTypes = {
       readonly type: 'PDF' | 'WEBSITE' | 'YOUTUBE' | 'TEXT' | 'MARKDOWN';
       readonly updatedAt: CodecTypes['pg/timestamptz-temporal@1']['input'];
       readonly url: CodecTypes['pg/text@1']['input'] | null;
-      readonly workspaceId: CodecTypes['pg/text@1']['input'];
+      readonly workspaceId: CodecTypes['pg/text@1']['input'] | null;
     };
     readonly SourceChunk: {
       readonly content: CodecTypes['pg/text@1']['input'];
@@ -485,6 +567,23 @@ export type StorageColumnTypes = {
       readonly updatedAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
       readonly workspaceId: CodecTypes['pg/text@1']['output'];
     };
+    readonly learning_roadmap: {
+      readonly analysis: CodecTypes['pg/json@1']['output'] | null;
+      readonly collectionId: CodecTypes['pg/text@1']['output'] | null;
+      readonly content: CodecTypes['pg/json@1']['output'] | null;
+      readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
+      readonly durationMonths: CodecTypes['pg/int4@1']['output'];
+      readonly generationError: CodecTypes['pg/text@1']['output'] | null;
+      readonly id: CodecTypes['pg/text@1']['output'];
+      readonly limitations: CodecTypes['pg/json@1']['output'] | null;
+      readonly phase: CodecTypes['pg/text@1']['output'];
+      readonly sourceIds: ReadonlyArray<CodecTypes['pg/text@1']['output']>;
+      readonly status: CodecTypes['pg/text@1']['output'];
+      readonly title: CodecTypes['pg/text@1']['output'];
+      readonly topicGoals: ReadonlyArray<CodecTypes['pg/text@1']['output']>;
+      readonly updatedAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
+      readonly workspaceId: CodecTypes['pg/text@1']['output'] | null;
+    };
     readonly message: {
       readonly citations: CodecTypes['pg/json@1']['output'] | null;
       readonly content: CodecTypes['pg/text@1']['output'];
@@ -492,6 +591,29 @@ export type StorageColumnTypes = {
       readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
       readonly id: CodecTypes['pg/text@1']['output'];
       readonly role: 'USER' | 'ASSISTANT';
+    };
+    readonly roadmap_activity: {
+      readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
+      readonly id: CodecTypes['pg/text@1']['output'];
+      readonly kind: CodecTypes['pg/text@1']['output'];
+      readonly resourceId: CodecTypes['pg/text@1']['output'] | null;
+      readonly roadmapId: CodecTypes['pg/text@1']['output'];
+      readonly taskId: CodecTypes['pg/text@1']['output'] | null;
+    };
+    readonly roadmap_collection: {
+      readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
+      readonly id: CodecTypes['pg/text@1']['output'];
+      readonly title: CodecTypes['pg/text@1']['output'];
+      readonly updatedAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
+      readonly userId: CodecTypes['pg/text@1']['output'];
+    };
+    readonly roadmap_task_progress: {
+      readonly completedAt: CodecTypes['pg/timestamptz-temporal@1']['output'] | null;
+      readonly id: CodecTypes['pg/text@1']['output'];
+      readonly isCompleted: CodecTypes['pg/bool@1']['output'];
+      readonly roadmapId: CodecTypes['pg/text@1']['output'];
+      readonly taskId: CodecTypes['pg/text@1']['output'];
+      readonly updatedAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
     };
     readonly session: {
       readonly createdAt: CodecTypes['pg/timestamptz-string@1']['output'];
@@ -504,6 +626,7 @@ export type StorageColumnTypes = {
       readonly userId: CodecTypes['pg/text@1']['output'];
     };
     readonly source: {
+      readonly collectionId: CodecTypes['pg/text@1']['output'] | null;
       readonly content: CodecTypes['pg/text@1']['output'] | null;
       readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
       readonly id: CodecTypes['pg/text@1']['output'];
@@ -513,7 +636,7 @@ export type StorageColumnTypes = {
       readonly type: 'PDF' | 'WEBSITE' | 'YOUTUBE' | 'TEXT' | 'MARKDOWN';
       readonly updatedAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
       readonly url: CodecTypes['pg/text@1']['output'] | null;
-      readonly workspaceId: CodecTypes['pg/text@1']['output'];
+      readonly workspaceId: CodecTypes['pg/text@1']['output'] | null;
     };
     readonly source_chunk: {
       readonly content: CodecTypes['pg/text@1']['output'];
@@ -592,6 +715,23 @@ export type StorageColumnInputTypes = {
       readonly updatedAt: CodecTypes['pg/timestamptz-temporal@1']['input'];
       readonly workspaceId: CodecTypes['pg/text@1']['input'];
     };
+    readonly learning_roadmap: {
+      readonly analysis: CodecTypes['pg/json@1']['input'] | null;
+      readonly collectionId: CodecTypes['pg/text@1']['input'] | null;
+      readonly content: CodecTypes['pg/json@1']['input'] | null;
+      readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['input'];
+      readonly durationMonths: CodecTypes['pg/int4@1']['input'];
+      readonly generationError: CodecTypes['pg/text@1']['input'] | null;
+      readonly id: CodecTypes['pg/text@1']['input'];
+      readonly limitations: CodecTypes['pg/json@1']['input'] | null;
+      readonly phase: CodecTypes['pg/text@1']['input'];
+      readonly sourceIds: ReadonlyArray<CodecTypes['pg/text@1']['input']>;
+      readonly status: CodecTypes['pg/text@1']['input'];
+      readonly title: CodecTypes['pg/text@1']['input'];
+      readonly topicGoals: ReadonlyArray<CodecTypes['pg/text@1']['input']>;
+      readonly updatedAt: CodecTypes['pg/timestamptz-temporal@1']['input'];
+      readonly workspaceId: CodecTypes['pg/text@1']['input'] | null;
+    };
     readonly message: {
       readonly citations: CodecTypes['pg/json@1']['input'] | null;
       readonly content: CodecTypes['pg/text@1']['input'];
@@ -599,6 +739,29 @@ export type StorageColumnInputTypes = {
       readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['input'];
       readonly id: CodecTypes['pg/text@1']['input'];
       readonly role: 'USER' | 'ASSISTANT';
+    };
+    readonly roadmap_activity: {
+      readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['input'];
+      readonly id: CodecTypes['pg/text@1']['input'];
+      readonly kind: CodecTypes['pg/text@1']['input'];
+      readonly resourceId: CodecTypes['pg/text@1']['input'] | null;
+      readonly roadmapId: CodecTypes['pg/text@1']['input'];
+      readonly taskId: CodecTypes['pg/text@1']['input'] | null;
+    };
+    readonly roadmap_collection: {
+      readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['input'];
+      readonly id: CodecTypes['pg/text@1']['input'];
+      readonly title: CodecTypes['pg/text@1']['input'];
+      readonly updatedAt: CodecTypes['pg/timestamptz-temporal@1']['input'];
+      readonly userId: CodecTypes['pg/text@1']['input'];
+    };
+    readonly roadmap_task_progress: {
+      readonly completedAt: CodecTypes['pg/timestamptz-temporal@1']['input'] | null;
+      readonly id: CodecTypes['pg/text@1']['input'];
+      readonly isCompleted: CodecTypes['pg/bool@1']['input'];
+      readonly roadmapId: CodecTypes['pg/text@1']['input'];
+      readonly taskId: CodecTypes['pg/text@1']['input'];
+      readonly updatedAt: CodecTypes['pg/timestamptz-temporal@1']['input'];
     };
     readonly session: {
       readonly createdAt: CodecTypes['pg/timestamptz-string@1']['input'];
@@ -611,6 +774,7 @@ export type StorageColumnInputTypes = {
       readonly userId: CodecTypes['pg/text@1']['input'];
     };
     readonly source: {
+      readonly collectionId: CodecTypes['pg/text@1']['input'] | null;
       readonly content: CodecTypes['pg/text@1']['input'] | null;
       readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['input'];
       readonly id: CodecTypes['pg/text@1']['input'];
@@ -620,7 +784,7 @@ export type StorageColumnInputTypes = {
       readonly type: 'PDF' | 'WEBSITE' | 'YOUTUBE' | 'TEXT' | 'MARKDOWN';
       readonly updatedAt: CodecTypes['pg/timestamptz-temporal@1']['input'];
       readonly url: CodecTypes['pg/text@1']['input'] | null;
-      readonly workspaceId: CodecTypes['pg/text@1']['input'];
+      readonly workspaceId: CodecTypes['pg/text@1']['input'] | null;
     };
     readonly source_chunk: {
       readonly content: CodecTypes['pg/text@1']['input'];
@@ -706,6 +870,28 @@ export namespace Models {
     workspace: public_Workspace;
     readonly [RelationKeys]?: 'workspace';
   };
+  export type public_LearningRoadmap = {
+    analysis: CodecTypes['pg/json@1']['output'] | null;
+    collectionId: CodecTypes['pg/text@1']['output'] | null;
+    content: CodecTypes['pg/json@1']['output'] | null;
+    createdAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
+    durationMonths: CodecTypes['pg/int4@1']['output'];
+    generationError: CodecTypes['pg/text@1']['output'] | null;
+    id: CodecTypes['pg/text@1']['output'];
+    limitations: CodecTypes['pg/json@1']['output'] | null;
+    phase: CodecTypes['pg/text@1']['output'];
+    sourceIds: ReadonlyArray<CodecTypes['pg/text@1']['output']>;
+    status: CodecTypes['pg/text@1']['output'];
+    title: CodecTypes['pg/text@1']['output'];
+    topicGoals: ReadonlyArray<CodecTypes['pg/text@1']['output']>;
+    updatedAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
+    workspaceId: CodecTypes['pg/text@1']['output'] | null;
+    activities: public_RoadmapActivity[];
+    collection: public_RoadmapCollection | null;
+    progress: public_RoadmapTaskProgress[];
+    workspace: public_Workspace | null;
+    readonly [RelationKeys]?: 'activities' | 'collection' | 'progress' | 'workspace';
+  };
   export type public_Message = {
     citations: CodecTypes['pg/json@1']['output'] | null;
     content: CodecTypes['pg/text@1']['output'];
@@ -715,6 +901,37 @@ export namespace Models {
     role: 'USER' | 'ASSISTANT';
     conversation: public_Conversation;
     readonly [RelationKeys]?: 'conversation';
+  };
+  export type public_RoadmapActivity = {
+    createdAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
+    id: CodecTypes['pg/text@1']['output'];
+    kind: CodecTypes['pg/text@1']['output'];
+    resourceId: CodecTypes['pg/text@1']['output'] | null;
+    roadmapId: CodecTypes['pg/text@1']['output'];
+    taskId: CodecTypes['pg/text@1']['output'] | null;
+    roadmap: public_LearningRoadmap;
+    readonly [RelationKeys]?: 'roadmap';
+  };
+  export type public_RoadmapCollection = {
+    createdAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
+    id: CodecTypes['pg/text@1']['output'];
+    title: CodecTypes['pg/text@1']['output'];
+    updatedAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
+    userId: CodecTypes['pg/text@1']['output'];
+    roadmaps: public_LearningRoadmap[];
+    sources: public_Source[];
+    user: public_User;
+    readonly [RelationKeys]?: 'roadmaps' | 'sources' | 'user';
+  };
+  export type public_RoadmapTaskProgress = {
+    completedAt: CodecTypes['pg/timestamptz-temporal@1']['output'] | null;
+    id: CodecTypes['pg/text@1']['output'];
+    isCompleted: CodecTypes['pg/bool@1']['output'];
+    roadmapId: CodecTypes['pg/text@1']['output'];
+    taskId: CodecTypes['pg/text@1']['output'];
+    updatedAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
+    roadmap: public_LearningRoadmap;
+    readonly [RelationKeys]?: 'roadmap';
   };
   export type public_Session = {
     createdAt: CodecTypes['pg/timestamptz-string@1']['output'];
@@ -729,6 +946,7 @@ export namespace Models {
     readonly [RelationKeys]?: 'user';
   };
   export type public_Source = {
+    collectionId: CodecTypes['pg/text@1']['output'] | null;
     content: CodecTypes['pg/text@1']['output'] | null;
     createdAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
     id: CodecTypes['pg/text@1']['output'];
@@ -738,10 +956,11 @@ export namespace Models {
     type: 'PDF' | 'WEBSITE' | 'YOUTUBE' | 'TEXT' | 'MARKDOWN';
     updatedAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
     url: CodecTypes['pg/text@1']['output'] | null;
-    workspaceId: CodecTypes['pg/text@1']['output'];
+    workspaceId: CodecTypes['pg/text@1']['output'] | null;
     chunks: public_SourceChunk[];
-    workspace: public_Workspace;
-    readonly [RelationKeys]?: 'chunks' | 'workspace';
+    collection: public_RoadmapCollection | null;
+    workspace: public_Workspace | null;
+    readonly [RelationKeys]?: 'chunks' | 'collection' | 'workspace';
   };
   export type public_SourceChunk = {
     content: CodecTypes['pg/text@1']['output'];
@@ -763,8 +982,9 @@ export namespace Models {
     name: CodecTypes['pg/text@1']['output'];
     updatedAt: CodecTypes['pg/timestamptz-string@1']['output'];
     accounts: public_Account[];
+    roadmapCollections: public_RoadmapCollection[];
     sessions: public_Session[];
-    readonly [RelationKeys]?: 'accounts' | 'sessions';
+    readonly [RelationKeys]?: 'accounts' | 'roadmapCollections' | 'sessions';
   };
   export type public_Verification = {
     createdAt: CodecTypes['pg/timestamptz-string@1']['output'];
@@ -786,9 +1006,10 @@ export namespace Models {
     userId: CodecTypes['pg/text@1']['output'];
     artifacts: public_LearningArtifact[];
     conversations: public_Conversation[];
+    roadmaps: public_LearningRoadmap[];
     sources: public_Source[];
     user: public_User;
-    readonly [RelationKeys]?: 'artifacts' | 'conversations' | 'sources' | 'user';
+    readonly [RelationKeys]?: 'artifacts' | 'conversations' | 'roadmaps' | 'sources' | 'user';
   };
 }
 
@@ -797,7 +1018,11 @@ export declare const models: {
     Account: Models.public_Account;
     Conversation: Models.public_Conversation;
     LearningArtifact: Models.public_LearningArtifact;
+    LearningRoadmap: Models.public_LearningRoadmap;
     Message: Models.public_Message;
+    RoadmapActivity: Models.public_RoadmapActivity;
+    RoadmapCollection: Models.public_RoadmapCollection;
+    RoadmapTaskProgress: Models.public_RoadmapTaskProgress;
     Session: Models.public_Session;
     Source: Models.public_Source;
     SourceChunk: Models.public_SourceChunk;
@@ -1124,6 +1349,173 @@ type ContractBase = Omit<
                 },
               ];
             };
+            readonly learning_roadmap: {
+              columns: {
+                readonly analysis: {
+                  readonly dataType: 'pg/json';
+                  readonly codecId: 'pg/json@1';
+                  readonly nullable: true;
+                  readonly many: false;
+                };
+                readonly collectionId: {
+                  readonly dataType: 'pg/text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: true;
+                  readonly many: false;
+                };
+                readonly content: {
+                  readonly dataType: 'pg/json';
+                  readonly codecId: 'pg/json@1';
+                  readonly nullable: true;
+                  readonly many: false;
+                };
+                readonly createdAt: {
+                  readonly dataType: 'pg/timestamptz';
+                  readonly codecId: 'pg/timestamptz-temporal@1';
+                  readonly nullable: false;
+                  readonly default: { readonly kind: 'function'; readonly expression: 'now()' };
+                  readonly many: false;
+                };
+                readonly durationMonths: {
+                  readonly dataType: 'pg/int4';
+                  readonly codecId: 'pg/int4@1';
+                  readonly nullable: false;
+                  readonly many: false;
+                };
+                readonly generationError: {
+                  readonly dataType: 'pg/text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: true;
+                  readonly many: false;
+                };
+                readonly id: {
+                  readonly dataType: 'pg/text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: false;
+                  readonly many: false;
+                };
+                readonly limitations: {
+                  readonly dataType: 'pg/json';
+                  readonly codecId: 'pg/json@1';
+                  readonly nullable: true;
+                  readonly many: false;
+                };
+                readonly phase: {
+                  readonly dataType: 'pg/text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: false;
+                  readonly default: {
+                    readonly kind: 'literal';
+                    readonly value: DefaultLiteralValue<'pg/text@1', 'analyzing'>;
+                  };
+                  readonly many: false;
+                };
+                readonly sourceIds: {
+                  readonly dataType: 'pg/text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: false;
+                  readonly many: { readonly elementNullable: false };
+                };
+                readonly status: {
+                  readonly dataType: 'pg/text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: false;
+                  readonly default: {
+                    readonly kind: 'literal';
+                    readonly value: DefaultLiteralValue<'pg/text@1', 'generating'>;
+                  };
+                  readonly many: false;
+                };
+                readonly title: {
+                  readonly dataType: 'pg/text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: false;
+                  readonly many: false;
+                };
+                readonly topicGoals: {
+                  readonly dataType: 'pg/text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: false;
+                  readonly default: {
+                    readonly kind: 'literal';
+                    readonly value: DefaultLiteralValue<'pg/text@1', readonly []>;
+                  };
+                  readonly many: { readonly elementNullable: false };
+                };
+                readonly updatedAt: {
+                  readonly dataType: 'pg/timestamptz';
+                  readonly codecId: 'pg/timestamptz-temporal@1';
+                  readonly nullable: false;
+                  readonly many: false;
+                };
+                readonly workspaceId: {
+                  readonly dataType: 'pg/text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: true;
+                  readonly many: false;
+                };
+              };
+              primaryKey: { readonly columns: readonly ['id'] };
+              uniques: readonly [];
+              indexes: readonly [
+                {
+                  readonly name: 'learning_roadmap_collectionId_createdAt_idx_8cc402d6';
+                  readonly prefix: 'learning_roadmap_collectionId_createdAt_idx';
+                  readonly columns: readonly ['collectionId', 'createdAt'];
+                  readonly unique: false;
+                },
+                {
+                  readonly name: 'learning_roadmap_collectionId_idx_b344fc1a';
+                  readonly prefix: 'learning_roadmap_collectionId_idx';
+                  readonly columns: readonly ['collectionId'];
+                  readonly unique: false;
+                },
+                {
+                  readonly name: 'learning_roadmap_workspaceId_createdAt_idx_5ff7e893';
+                  readonly prefix: 'learning_roadmap_workspaceId_createdAt_idx';
+                  readonly columns: readonly ['workspaceId', 'createdAt'];
+                  readonly unique: false;
+                },
+                {
+                  readonly name: 'learning_roadmap_workspaceId_idx_ba65f874';
+                  readonly prefix: 'learning_roadmap_workspaceId_idx';
+                  readonly columns: readonly ['workspaceId'];
+                  readonly unique: false;
+                },
+                {
+                  readonly name: 'learning_roadmap_workspaceId_status_idx_76d68132';
+                  readonly prefix: 'learning_roadmap_workspaceId_status_idx';
+                  readonly columns: readonly ['workspaceId', 'status'];
+                  readonly unique: false;
+                },
+              ];
+              foreignKeys: readonly [
+                {
+                  readonly source: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'learning_roadmap';
+                    readonly columns: readonly ['workspaceId'];
+                  };
+                  readonly target: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'workspace';
+                    readonly columns: readonly ['id'];
+                  };
+                },
+                {
+                  readonly source: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'learning_roadmap';
+                    readonly columns: readonly ['collectionId'];
+                  };
+                  readonly target: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'roadmap_collection';
+                    readonly columns: readonly ['id'];
+                  };
+                },
+              ];
+            };
             readonly message: {
               columns: {
                 readonly citations: {
@@ -1190,6 +1582,210 @@ type ContractBase = Omit<
                   readonly target: {
                     readonly namespaceId: 'public' & NamespaceId;
                     readonly tableName: 'conversation';
+                    readonly columns: readonly ['id'];
+                  };
+                },
+              ];
+            };
+            readonly roadmap_activity: {
+              columns: {
+                readonly createdAt: {
+                  readonly dataType: 'pg/timestamptz';
+                  readonly codecId: 'pg/timestamptz-temporal@1';
+                  readonly nullable: false;
+                  readonly default: { readonly kind: 'function'; readonly expression: 'now()' };
+                  readonly many: false;
+                };
+                readonly id: {
+                  readonly dataType: 'pg/text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: false;
+                  readonly many: false;
+                };
+                readonly kind: {
+                  readonly dataType: 'pg/text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: false;
+                  readonly many: false;
+                };
+                readonly resourceId: {
+                  readonly dataType: 'pg/text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: true;
+                  readonly many: false;
+                };
+                readonly roadmapId: {
+                  readonly dataType: 'pg/text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: false;
+                  readonly many: false;
+                };
+                readonly taskId: {
+                  readonly dataType: 'pg/text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: true;
+                  readonly many: false;
+                };
+              };
+              primaryKey: { readonly columns: readonly ['id'] };
+              uniques: readonly [];
+              indexes: readonly [
+                {
+                  readonly name: 'roadmap_activity_roadmapId_createdAt_idx_ee1c3de0';
+                  readonly prefix: 'roadmap_activity_roadmapId_createdAt_idx';
+                  readonly columns: readonly ['roadmapId', 'createdAt'];
+                  readonly unique: false;
+                },
+                {
+                  readonly name: 'roadmap_activity_roadmapId_idx_be7128ae';
+                  readonly prefix: 'roadmap_activity_roadmapId_idx';
+                  readonly columns: readonly ['roadmapId'];
+                  readonly unique: false;
+                },
+              ];
+              foreignKeys: readonly [
+                {
+                  readonly source: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'roadmap_activity';
+                    readonly columns: readonly ['roadmapId'];
+                  };
+                  readonly target: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'learning_roadmap';
+                    readonly columns: readonly ['id'];
+                  };
+                },
+              ];
+            };
+            readonly roadmap_collection: {
+              columns: {
+                readonly createdAt: {
+                  readonly dataType: 'pg/timestamptz';
+                  readonly codecId: 'pg/timestamptz-temporal@1';
+                  readonly nullable: false;
+                  readonly default: { readonly kind: 'function'; readonly expression: 'now()' };
+                  readonly many: false;
+                };
+                readonly id: {
+                  readonly dataType: 'pg/text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: false;
+                  readonly many: false;
+                };
+                readonly title: {
+                  readonly dataType: 'pg/text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: false;
+                  readonly many: false;
+                };
+                readonly updatedAt: {
+                  readonly dataType: 'pg/timestamptz';
+                  readonly codecId: 'pg/timestamptz-temporal@1';
+                  readonly nullable: false;
+                  readonly many: false;
+                };
+                readonly userId: {
+                  readonly dataType: 'pg/text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: false;
+                  readonly many: false;
+                };
+              };
+              primaryKey: { readonly columns: readonly ['id'] };
+              uniques: readonly [];
+              indexes: readonly [
+                {
+                  readonly name: 'roadmap_collection_userId_idx_a489d58a';
+                  readonly prefix: 'roadmap_collection_userId_idx';
+                  readonly columns: readonly ['userId'];
+                  readonly unique: false;
+                },
+                {
+                  readonly name: 'roadmap_collection_userId_updatedAt_idx_42f5280d';
+                  readonly prefix: 'roadmap_collection_userId_updatedAt_idx';
+                  readonly columns: readonly ['userId', 'updatedAt'];
+                  readonly unique: false;
+                },
+              ];
+              foreignKeys: readonly [
+                {
+                  readonly source: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'roadmap_collection';
+                    readonly columns: readonly ['userId'];
+                  };
+                  readonly target: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'user';
+                    readonly columns: readonly ['id'];
+                  };
+                },
+              ];
+            };
+            readonly roadmap_task_progress: {
+              columns: {
+                readonly completedAt: {
+                  readonly dataType: 'pg/timestamptz';
+                  readonly codecId: 'pg/timestamptz-temporal@1';
+                  readonly nullable: true;
+                  readonly many: false;
+                };
+                readonly id: {
+                  readonly dataType: 'pg/text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: false;
+                  readonly many: false;
+                };
+                readonly isCompleted: {
+                  readonly dataType: 'pg/bool';
+                  readonly codecId: 'pg/bool@1';
+                  readonly nullable: false;
+                  readonly default: {
+                    readonly kind: 'literal';
+                    readonly value: DefaultLiteralValue<'pg/bool@1', false>;
+                  };
+                  readonly many: false;
+                };
+                readonly roadmapId: {
+                  readonly dataType: 'pg/text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: false;
+                  readonly many: false;
+                };
+                readonly taskId: {
+                  readonly dataType: 'pg/text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: false;
+                  readonly many: false;
+                };
+                readonly updatedAt: {
+                  readonly dataType: 'pg/timestamptz';
+                  readonly codecId: 'pg/timestamptz-temporal@1';
+                  readonly nullable: false;
+                  readonly many: false;
+                };
+              };
+              primaryKey: { readonly columns: readonly ['id'] };
+              uniques: readonly [{ readonly columns: readonly ['roadmapId', 'taskId'] }];
+              indexes: readonly [
+                {
+                  readonly name: 'roadmap_task_progress_roadmapId_idx_be7128ae';
+                  readonly prefix: 'roadmap_task_progress_roadmapId_idx';
+                  readonly columns: readonly ['roadmapId'];
+                  readonly unique: false;
+                },
+              ];
+              foreignKeys: readonly [
+                {
+                  readonly source: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'roadmap_task_progress';
+                    readonly columns: readonly ['roadmapId'];
+                  };
+                  readonly target: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'learning_roadmap';
                     readonly columns: readonly ['id'];
                   };
                 },
@@ -1276,6 +1872,12 @@ type ContractBase = Omit<
             };
             readonly source: {
               columns: {
+                readonly collectionId: {
+                  readonly dataType: 'pg/text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: true;
+                  readonly many: false;
+                };
                 readonly content: {
                   readonly dataType: 'pg/text';
                   readonly codecId: 'pg/text@1';
@@ -1338,13 +1940,25 @@ type ContractBase = Omit<
                 readonly workspaceId: {
                   readonly dataType: 'pg/text';
                   readonly codecId: 'pg/text@1';
-                  readonly nullable: false;
+                  readonly nullable: true;
                   readonly many: false;
                 };
               };
               primaryKey: { readonly columns: readonly ['id'] };
               uniques: readonly [];
               indexes: readonly [
+                {
+                  readonly name: 'source_collectionId_idx_b344fc1a';
+                  readonly prefix: 'source_collectionId_idx';
+                  readonly columns: readonly ['collectionId'];
+                  readonly unique: false;
+                },
+                {
+                  readonly name: 'source_collectionId_status_idx_11b1d1f5';
+                  readonly prefix: 'source_collectionId_status_idx';
+                  readonly columns: readonly ['collectionId', 'status'];
+                  readonly unique: false;
+                },
                 {
                   readonly name: 'source_workspaceId_idx_ba65f874';
                   readonly prefix: 'source_workspaceId_idx';
@@ -1374,6 +1988,18 @@ type ContractBase = Omit<
                   readonly target: {
                     readonly namespaceId: 'public' & NamespaceId;
                     readonly tableName: 'workspace';
+                    readonly columns: readonly ['id'];
+                  };
+                },
+                {
+                  readonly source: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'source';
+                    readonly columns: readonly ['collectionId'];
+                  };
+                  readonly target: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'roadmap_collection';
                     readonly columns: readonly ['id'];
                   };
                 },
@@ -1686,7 +2312,23 @@ type ContractBase = Omit<
       readonly namespace: 'public' & NamespaceId;
       readonly model: 'LearningArtifact';
     };
+    readonly learning_roadmap: {
+      readonly namespace: 'public' & NamespaceId;
+      readonly model: 'LearningRoadmap';
+    };
     readonly message: { readonly namespace: 'public' & NamespaceId; readonly model: 'Message' };
+    readonly roadmap_activity: {
+      readonly namespace: 'public' & NamespaceId;
+      readonly model: 'RoadmapActivity';
+    };
+    readonly roadmap_collection: {
+      readonly namespace: 'public' & NamespaceId;
+      readonly model: 'RoadmapCollection';
+    };
+    readonly roadmap_task_progress: {
+      readonly namespace: 'public' & NamespaceId;
+      readonly model: 'RoadmapTaskProgress';
+    };
     readonly session: { readonly namespace: 'public' & NamespaceId; readonly model: 'Session' };
     readonly source: { readonly namespace: 'public' & NamespaceId; readonly model: 'Source' };
     readonly source_chunk: {
@@ -1967,6 +2609,147 @@ type ContractBase = Omit<
               };
             };
           };
+          readonly LearningRoadmap: {
+            readonly fields: {
+              readonly analysis: {
+                readonly nullable: true;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/json@1' };
+              };
+              readonly collectionId: {
+                readonly nullable: true;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+              readonly content: {
+                readonly nullable: true;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/json@1' };
+              };
+              readonly createdAt: {
+                readonly nullable: false;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'pg/timestamptz-temporal@1';
+                };
+              };
+              readonly durationMonths: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/int4@1' };
+              };
+              readonly generationError: {
+                readonly nullable: true;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+              readonly id: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+              readonly limitations: {
+                readonly nullable: true;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/json@1' };
+              };
+              readonly phase: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+              readonly sourceIds: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+                readonly many: { readonly elementNullable: false };
+              };
+              readonly status: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+              readonly title: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+              readonly topicGoals: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+                readonly many: { readonly elementNullable: false };
+              };
+              readonly updatedAt: {
+                readonly nullable: false;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'pg/timestamptz-temporal@1';
+                };
+              };
+              readonly workspaceId: {
+                readonly nullable: true;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+            };
+            readonly relations: {
+              readonly activities: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'RoadmapActivity';
+                };
+                readonly cardinality: '1:N';
+                readonly on: {
+                  readonly localFields: readonly ['id'];
+                  readonly targetFields: readonly ['roadmapId'];
+                };
+              };
+              readonly collection: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'RoadmapCollection';
+                };
+                readonly cardinality: 'N:1';
+                readonly nullable: true;
+                readonly on: {
+                  readonly localFields: readonly ['collectionId'];
+                  readonly targetFields: readonly ['id'];
+                };
+              };
+              readonly progress: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'RoadmapTaskProgress';
+                };
+                readonly cardinality: '1:N';
+                readonly on: {
+                  readonly localFields: readonly ['id'];
+                  readonly targetFields: readonly ['roadmapId'];
+                };
+              };
+              readonly workspace: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'Workspace';
+                };
+                readonly cardinality: 'N:1';
+                readonly nullable: true;
+                readonly on: {
+                  readonly localFields: readonly ['workspaceId'];
+                  readonly targetFields: readonly ['id'];
+                };
+              };
+            };
+            readonly storage: {
+              readonly table: 'learning_roadmap';
+              readonly namespaceId: 'public';
+              readonly fields: {
+                readonly analysis: { readonly column: 'analysis' };
+                readonly collectionId: { readonly column: 'collectionId' };
+                readonly content: { readonly column: 'content' };
+                readonly createdAt: { readonly column: 'createdAt' };
+                readonly durationMonths: { readonly column: 'durationMonths' };
+                readonly generationError: { readonly column: 'generationError' };
+                readonly id: { readonly column: 'id' };
+                readonly limitations: { readonly column: 'limitations' };
+                readonly phase: { readonly column: 'phase' };
+                readonly sourceIds: { readonly column: 'sourceIds' };
+                readonly status: { readonly column: 'status' };
+                readonly title: { readonly column: 'title' };
+                readonly topicGoals: { readonly column: 'topicGoals' };
+                readonly updatedAt: { readonly column: 'updatedAt' };
+                readonly workspaceId: { readonly column: 'workspaceId' };
+              };
+            };
+          };
           readonly Message: {
             readonly fields: {
               readonly citations: {
@@ -2021,6 +2804,197 @@ type ContractBase = Omit<
                 readonly createdAt: { readonly column: 'createdAt' };
                 readonly id: { readonly column: 'id' };
                 readonly role: { readonly column: 'role' };
+              };
+            };
+          };
+          readonly RoadmapActivity: {
+            readonly fields: {
+              readonly createdAt: {
+                readonly nullable: false;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'pg/timestamptz-temporal@1';
+                };
+              };
+              readonly id: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+              readonly kind: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+              readonly resourceId: {
+                readonly nullable: true;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+              readonly roadmapId: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+              readonly taskId: {
+                readonly nullable: true;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+            };
+            readonly relations: {
+              readonly roadmap: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'LearningRoadmap';
+                };
+                readonly cardinality: 'N:1';
+                readonly nullable: false;
+                readonly on: {
+                  readonly localFields: readonly ['roadmapId'];
+                  readonly targetFields: readonly ['id'];
+                };
+              };
+            };
+            readonly storage: {
+              readonly table: 'roadmap_activity';
+              readonly namespaceId: 'public';
+              readonly fields: {
+                readonly createdAt: { readonly column: 'createdAt' };
+                readonly id: { readonly column: 'id' };
+                readonly kind: { readonly column: 'kind' };
+                readonly resourceId: { readonly column: 'resourceId' };
+                readonly roadmapId: { readonly column: 'roadmapId' };
+                readonly taskId: { readonly column: 'taskId' };
+              };
+            };
+          };
+          readonly RoadmapCollection: {
+            readonly fields: {
+              readonly createdAt: {
+                readonly nullable: false;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'pg/timestamptz-temporal@1';
+                };
+              };
+              readonly id: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+              readonly title: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+              readonly updatedAt: {
+                readonly nullable: false;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'pg/timestamptz-temporal@1';
+                };
+              };
+              readonly userId: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+            };
+            readonly relations: {
+              readonly roadmaps: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'LearningRoadmap';
+                };
+                readonly cardinality: '1:N';
+                readonly on: {
+                  readonly localFields: readonly ['id'];
+                  readonly targetFields: readonly ['collectionId'];
+                };
+              };
+              readonly sources: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'Source';
+                };
+                readonly cardinality: '1:N';
+                readonly on: {
+                  readonly localFields: readonly ['id'];
+                  readonly targetFields: readonly ['collectionId'];
+                };
+              };
+              readonly user: {
+                readonly to: { readonly namespace: 'public' & NamespaceId; readonly model: 'User' };
+                readonly cardinality: 'N:1';
+                readonly nullable: false;
+                readonly on: {
+                  readonly localFields: readonly ['userId'];
+                  readonly targetFields: readonly ['id'];
+                };
+              };
+            };
+            readonly storage: {
+              readonly table: 'roadmap_collection';
+              readonly namespaceId: 'public';
+              readonly fields: {
+                readonly createdAt: { readonly column: 'createdAt' };
+                readonly id: { readonly column: 'id' };
+                readonly title: { readonly column: 'title' };
+                readonly updatedAt: { readonly column: 'updatedAt' };
+                readonly userId: { readonly column: 'userId' };
+              };
+            };
+          };
+          readonly RoadmapTaskProgress: {
+            readonly fields: {
+              readonly completedAt: {
+                readonly nullable: true;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'pg/timestamptz-temporal@1';
+                };
+              };
+              readonly id: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+              readonly isCompleted: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/bool@1' };
+              };
+              readonly roadmapId: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+              readonly taskId: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+              readonly updatedAt: {
+                readonly nullable: false;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'pg/timestamptz-temporal@1';
+                };
+              };
+            };
+            readonly relations: {
+              readonly roadmap: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'LearningRoadmap';
+                };
+                readonly cardinality: 'N:1';
+                readonly nullable: false;
+                readonly on: {
+                  readonly localFields: readonly ['roadmapId'];
+                  readonly targetFields: readonly ['id'];
+                };
+              };
+            };
+            readonly storage: {
+              readonly table: 'roadmap_task_progress';
+              readonly namespaceId: 'public';
+              readonly fields: {
+                readonly completedAt: { readonly column: 'completedAt' };
+                readonly id: { readonly column: 'id' };
+                readonly isCompleted: { readonly column: 'isCompleted' };
+                readonly roadmapId: { readonly column: 'roadmapId' };
+                readonly taskId: { readonly column: 'taskId' };
+                readonly updatedAt: { readonly column: 'updatedAt' };
               };
             };
           };
@@ -2096,6 +3070,10 @@ type ContractBase = Omit<
           };
           readonly Source: {
             readonly fields: {
+              readonly collectionId: {
+                readonly nullable: true;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
               readonly content: {
                 readonly nullable: true;
                 readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
@@ -2139,7 +3117,7 @@ type ContractBase = Omit<
                 readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
               };
               readonly workspaceId: {
-                readonly nullable: false;
+                readonly nullable: true;
                 readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
               };
             };
@@ -2155,13 +3133,25 @@ type ContractBase = Omit<
                   readonly targetFields: readonly ['sourceId'];
                 };
               };
+              readonly collection: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'RoadmapCollection';
+                };
+                readonly cardinality: 'N:1';
+                readonly nullable: true;
+                readonly on: {
+                  readonly localFields: readonly ['collectionId'];
+                  readonly targetFields: readonly ['id'];
+                };
+              };
               readonly workspace: {
                 readonly to: {
                   readonly namespace: 'public' & NamespaceId;
                   readonly model: 'Workspace';
                 };
                 readonly cardinality: 'N:1';
-                readonly nullable: false;
+                readonly nullable: true;
                 readonly on: {
                   readonly localFields: readonly ['workspaceId'];
                   readonly targetFields: readonly ['id'];
@@ -2172,6 +3162,7 @@ type ContractBase = Omit<
               readonly table: 'source';
               readonly namespaceId: 'public';
               readonly fields: {
+                readonly collectionId: { readonly column: 'collectionId' };
                 readonly content: { readonly column: 'content' };
                 readonly createdAt: { readonly column: 'createdAt' };
                 readonly id: { readonly column: 'id' };
@@ -2289,6 +3280,17 @@ type ContractBase = Omit<
                 readonly to: {
                   readonly namespace: 'public' & NamespaceId;
                   readonly model: 'Account';
+                };
+                readonly cardinality: '1:N';
+                readonly on: {
+                  readonly localFields: readonly ['id'];
+                  readonly targetFields: readonly ['userId'];
+                };
+              };
+              readonly roadmapCollections: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'RoadmapCollection';
                 };
                 readonly cardinality: '1:N';
                 readonly on: {
@@ -2429,6 +3431,17 @@ type ContractBase = Omit<
                 readonly to: {
                   readonly namespace: 'public' & NamespaceId;
                   readonly model: 'Conversation';
+                };
+                readonly cardinality: '1:N';
+                readonly on: {
+                  readonly localFields: readonly ['id'];
+                  readonly targetFields: readonly ['workspaceId'];
+                };
+              };
+              readonly roadmaps: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'LearningRoadmap';
                 };
                 readonly cardinality: '1:N';
                 readonly on: {
@@ -2593,8 +3606,67 @@ type ContractBase = Omit<
         {
           readonly onCreate: { readonly id: 'cuid2'; readonly kind: 'generator' };
           readonly ref: {
+            readonly entry: 'learning_roadmap';
+            readonly field: 'id';
+            readonly namespace: 'public';
+          };
+        },
+        {
+          readonly onCreate: { readonly id: 'instantNow'; readonly kind: 'generator' };
+          readonly onUpdate: { readonly id: 'instantNow'; readonly kind: 'generator' };
+          readonly ref: {
+            readonly entry: 'learning_roadmap';
+            readonly field: 'updatedAt';
+            readonly namespace: 'public';
+          };
+        },
+        {
+          readonly onCreate: { readonly id: 'cuid2'; readonly kind: 'generator' };
+          readonly ref: {
             readonly entry: 'message';
             readonly field: 'id';
+            readonly namespace: 'public';
+          };
+        },
+        {
+          readonly onCreate: { readonly id: 'cuid2'; readonly kind: 'generator' };
+          readonly ref: {
+            readonly entry: 'roadmap_activity';
+            readonly field: 'id';
+            readonly namespace: 'public';
+          };
+        },
+        {
+          readonly onCreate: { readonly id: 'cuid2'; readonly kind: 'generator' };
+          readonly ref: {
+            readonly entry: 'roadmap_collection';
+            readonly field: 'id';
+            readonly namespace: 'public';
+          };
+        },
+        {
+          readonly onCreate: { readonly id: 'instantNow'; readonly kind: 'generator' };
+          readonly onUpdate: { readonly id: 'instantNow'; readonly kind: 'generator' };
+          readonly ref: {
+            readonly entry: 'roadmap_collection';
+            readonly field: 'updatedAt';
+            readonly namespace: 'public';
+          };
+        },
+        {
+          readonly onCreate: { readonly id: 'cuid2'; readonly kind: 'generator' };
+          readonly ref: {
+            readonly entry: 'roadmap_task_progress';
+            readonly field: 'id';
+            readonly namespace: 'public';
+          };
+        },
+        {
+          readonly onCreate: { readonly id: 'instantNow'; readonly kind: 'generator' };
+          readonly onUpdate: { readonly id: 'instantNow'; readonly kind: 'generator' };
+          readonly ref: {
+            readonly entry: 'roadmap_task_progress';
+            readonly field: 'updatedAt';
             readonly namespace: 'public';
           };
         },

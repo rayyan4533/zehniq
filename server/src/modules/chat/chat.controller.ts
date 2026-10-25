@@ -27,6 +27,7 @@ export function createChatController(service = chatService) {
                 ...(input.conversationId !== undefined ? { conversationId: input.conversationId } : {}),
                 ...(input.model !== undefined ? { model: input.model } : {}),
                 ...(input.webSearch !== undefined ? { webSearch: input.webSearch } : {}),
+                ...(input.sourceIds !== undefined ? { sourceIds: input.sourceIds } : {}),
             });
         },
         async listConversations(req: Request, res: Response) {

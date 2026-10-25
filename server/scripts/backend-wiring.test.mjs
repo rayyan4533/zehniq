@@ -39,6 +39,7 @@ test("chat HTTP wiring validates messages, forwards identity, and streams", asyn
             calls++;
             assert.equal(workspaceId, "ws1"); assert.equal(userId, "alice");
             assert.deepEqual(input.messages, [message]);
+            assert.deepEqual(input.sourceIds, ["source1"]);
             res.setHeader("X-Conversation-Id", "c1");
             res.setHeader("Content-Type", "text/event-stream");
             res.write('data: {"type":"start"}\n\n'); res.end("data: [DONE]\n\n");
@@ -61,7 +62,7 @@ test("chat HTTP wiring validates messages, forwards identity, and streams", asyn
         assert.equal((await send({ messages })).status, 400);
     }
     assert.equal(calls, 0);
-    const response = await send({ messages: [message] });
+    const response = await send({ messages: [message], sourceIds: ["source1"] });
     assert.equal(response.status, 200); assert.equal(response.headers.get("x-conversation-id"), "c1");
     assert.match(await response.text(), /DONE/); assert.equal(calls, 1);
     const created = await fetch(`${base}/api/workspaces/ws1/conversations`, {
@@ -100,7 +101,7 @@ test("artifact HTTP wiring validates, preserves workspace scope, and forwards er
     assert.equal((await fetch(url, { method: "POST", headers: { "Content-Type": "application/json" }, body: "{" })).status, 400);
 });
 
-test("real app protects mounted endpoints and exposes three Inngest jobs", async (t) => {
+test("real app protects mounted endpoints and exposes jobs including source failure cleanup", async (t) => {
     const { Pool } = await import("pg");
     t.mock.method(Pool.prototype, "connect", async () => { throw new Error("Database disabled in HTTP wiring test"); });
     const { auth } = await import("../src/lib/auth.ts");
@@ -112,13 +113,25 @@ test("real app protects mounted endpoints and exposes three Inngest jobs", async
         ["GET", "/conversations/c1/messages"], ["DELETE", "/conversations/c1"],
         ["GET", "/artifacts"], ["POST", "/artifacts"], ["GET", "/artifacts/a1"],
         ["DELETE", "/artifacts/a1"], ["POST", "/sources/s1/retry"],
+        ["GET", "/roadmaps"], ["POST", "/roadmaps"], ["GET", "/roadmaps/r1"],
+        ["PATCH", "/roadmaps/r1"], ["DELETE", "/roadmaps/r1"], ["POST", "/roadmaps/r1/retry"],
+        ["PATCH", "/roadmaps/r1/tasks/t1"], ["GET", "/roadmaps/r1/analytics"],
+        ["GET", "/roadmaps/r1/resources/res1"], ["GET", "/roadmaps/r1/resources/res1/file"],
+        ["POST", "/roadmaps/r1/resources/res1/open"],
     ]) {
         const response = await fetch(`${base}/api/workspaces/ws1${path}`, { method });
         assert.equal(response.status, 401, `${method} ${path}`);
     }
     assert.equal((await fetch(`${base}/api/memory`)).status, 401);
+    for (const [method, path] of [
+        ["GET", ""], ["POST", ""], ["GET", "/path"], ["DELETE", "/path"],
+        ["GET", "/path/sources"], ["POST", "/path/sources"], ["POST", "/path/sources/upload"],
+        ["POST", "/path/sources/import/website"], ["DELETE", "/path/sources/source"],
+        ["GET", "/path/roadmaps"], ["POST", "/path/roadmaps"], ["PATCH", "/path/roadmaps/plan/tasks/task"],
+        ["GET", "/path/roadmaps/plan/resources/resource/file"],
+    ]) assert.equal((await fetch(`${base}/api/roadmaps/collections${path}`, { method })).status, 401);
     const info = await (await fetch(`${base}/api/inngest`)).json();
-    assert.equal(info.function_count, 3);
+    assert.equal(info.function_count, 6);
     const preflight = await fetch(`${base}/api/workspaces/ws1/chat`, { method: "OPTIONS", headers: { Origin: "http://localhost:3000", "Access-Control-Request-Method": "POST" } });
     assert.equal(preflight.status, 204);
     const response = await fetch(`${base}/health`, { headers: { Origin: "http://localhost:3000" } });

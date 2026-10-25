@@ -24,6 +24,16 @@ type CloudinaryUploadResponse = {
     error?: { message: string };
 };
 
+export async function deleteUploadedPdf(metadata: unknown) {
+    if (!metadata || typeof metadata !== "object" || !("publicId" in metadata) || typeof metadata.publicId !== "string") return;
+    if (!cloudName || !apiKey || !apiSecret) throw new Error("Cloudinary credentials are required to clean up an uploaded PDF");
+    cloudinary.config({ cloud_name: cloudName, api_key: apiKey, api_secret: apiSecret, secure: true });
+    await cloudinary.uploader.destroy(metadata.publicId, {
+        resource_type: "resourceType" in metadata && metadata.resourceType === "image" ? "image" : "raw",
+        invalidate: true,
+    });
+}
+
 export function getSignedCloudinaryDownloadUrl(
     publicId: string,
     resourceType: "raw" | "image" = "raw",

@@ -11,6 +11,7 @@ model User {
   updatedAt     TimestamptzString @default(now())
   accounts      Account[]
   sessions      Session[]
+  roadmapCollections RoadmapCollection[]
 
   @@map("user")
 }
@@ -76,6 +77,7 @@ model Workspace {
   sources   Source[]
    conversations Conversation[]
    artifacts  LearningArtifact[]
+   roadmaps LearningRoadmap[]
 
   @@index([userId])
   @@map("workspace")
@@ -98,7 +100,8 @@ enum SourceStatus {
 
 model Source {
   id          String       @id @default(cuid(2))
-  workspaceId String
+  workspaceId String?
+  collectionId String?
   type        SourceType
   title       String
   content     String?
@@ -107,8 +110,11 @@ model Source {
   metadata    Json?
   createdAt   DateTime     @default(now())
   updatedAt   temporal.updatedAt()
-  workspace   Workspace    @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  workspace   Workspace?   @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  collection RoadmapCollection? @relation(fields: [collectionId], references: [id], onDelete: Cascade)
   chunks      SourceChunk[]
+
+  @@index([collectionId, status])
 
   @@index([workspaceId])
   @@index([workspaceId, type])
@@ -202,4 +208,72 @@ model LearningArtifact {
   @@index([workspaceId, type])
   @@index([workspaceId, status])
   @@map("learning_artifact")
+}
+
+model LearningRoadmap {
+  id              String @id @default(cuid(2))
+  workspaceId     String?
+  collectionId    String?
+  topicGoals      String[] @default([])
+  title           String
+  durationMonths  Int
+  sourceIds       String[]
+  status          String @default("generating")
+  phase           String @default("analyzing")
+  content         Json?
+  analysis        Json?
+  limitations     Json?
+  generationError String?
+  createdAt       DateTime @default(now())
+  updatedAt       temporal.updatedAt()
+  workspace       Workspace? @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  collection      RoadmapCollection? @relation(fields: [collectionId], references: [id], onDelete: Cascade)
+  progress        RoadmapTaskProgress[]
+
+  @@index([collectionId, createdAt])
+  activities      RoadmapActivity[]
+
+  @@index([workspaceId, createdAt])
+  @@index([workspaceId, status])
+  @@map("learning_roadmap")
+}
+
+model RoadmapTaskProgress {
+  id          String @id @default(cuid(2))
+  roadmapId   String
+  taskId      String
+  isCompleted Boolean @default(false)
+  completedAt DateTime?
+  updatedAt   temporal.updatedAt()
+  roadmap     LearningRoadmap @relation(fields: [roadmapId], references: [id], onDelete: Cascade)
+
+  @@unique([roadmapId, taskId])
+  @@map("roadmap_task_progress")
+}
+
+model RoadmapActivity {
+  id         String @id @default(cuid(2))
+  roadmapId  String
+  kind       String
+  taskId     String?
+  resourceId String?
+  createdAt  DateTime @default(now())
+  roadmap    LearningRoadmap @relation(fields: [roadmapId], references: [id], onDelete: Cascade)
+
+  @@index([roadmapId, createdAt])
+  @@map("roadmap_activity")
+}
+
+model RoadmapCollection {
+  id        String @id @default(cuid(2))
+  userId    String
+  title     String
+  createdAt DateTime @default(now())
+  updatedAt temporal.updatedAt()
+  user      User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  sources   Source[]
+  roadmaps  LearningRoadmap[]
+
+  @@index([userId, updatedAt])
+  @@map("roadmap_collection")
 }

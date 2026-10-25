@@ -1,3 +1,4 @@
+import { sourceIndexNamespace } from "./source-scope.js";
 import type { PineconeRecord } from "@pinecone-database/pinecone";
 import { chunkPages, chunkText } from "./source-chunking.js";
 import { embedTexts } from "../../lib/open-ai/openai.js";
@@ -194,6 +195,7 @@ export async function embedAndIndexSource(
     source: SourceRecord,
     chunks: SourceChunkRecord[],
 ) {
+    const workspaceId = sourceIndexNamespace(source);
     const batchSize = 50;
     const records: PineconeRecord<VectorMetadata>[] = [];
 
@@ -215,7 +217,7 @@ export async function embedAndIndexSource(
                 id: chunk.id,
                 values: embedding,
                 metadata: {
-                    workspaceId: source.workspaceId,
+                    workspaceId: workspaceId,
                     sourceId: source.id,
                     chunkId: chunk.id,
                     chunkIndex: chunk.index,
@@ -231,8 +233,8 @@ export async function embedAndIndexSource(
     }
 
     // A retry creates new chunk IDs; remove vectors from earlier attempts first.
-    await deleteSourceVectors(source.workspaceId, source.id);
-    await upsertSourceVectors(source.workspaceId, records);
+    await deleteSourceVectors(workspaceId, source.id);
+    await upsertSourceVectors(workspaceId, records);
 
     const metadata =
         source.metadata &&

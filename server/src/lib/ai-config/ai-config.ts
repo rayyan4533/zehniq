@@ -8,7 +8,10 @@ export const CHAT_MODELS = ["gpt-4o-mini", "gpt-4o"] as const;
 export const EMBEDDING_MODEL = "text-embedding-3-small";
 
 /** Vector dimension count — must match Pinecone index configuration. */
-export const EMBEDDING_DIMENSIONS = 1536;
+export const EMBEDDING_DIMENSIONS = Number(process.env.EMBEDDING_DIMENSIONS || 1536);
+if (!Number.isInteger(EMBEDDING_DIMENSIONS) || EMBEDDING_DIMENSIONS < 1 || EMBEDDING_DIMENSIONS > 1536) {
+    throw new Error("EMBEDDING_DIMENSIONS must be an integer between 1 and 1536 for text-embedding-3-small");
+}
 
 /** Target max characters per text chunk during source processing. */
 export const CHUNK_SIZE = 1000;

@@ -1,4 +1,5 @@
-import { uploadPdfToCloudinary } from "../../lib/pdf-cloudinary/cloudinary.js";
+import { sourceIndexNamespace } from "./source-scope.js";
+import { deleteUploadedPdf, uploadPdfToCloudinary } from "../../lib/pdf-cloudinary/cloudinary.js";
 import { scrapeWebsite } from "../../lib/website-scrape-tool/firecrawl.js";
 import { extractPdfFromBuffer } from "../../lib/pdf-cloudinary/pdf.js";
 import { enqueueSourceProcessing } from "./source.events.js";
@@ -8,9 +9,10 @@ import {
     deleteSourceRecord,
     findSourceByIdAndWorkspaceId,
     findSourcesByWorkspaceId,
+    updateSourceRecord,
     type SourceRecord,
 } from "./source.repo.js";
-import { ConflictError, NotFoundError } from "../../types/app-error.js";
+import { AppError, ConflictError, NotFoundError, ValidationError } from "../../types/app-error.js";
 import { removeSourceFromIndex } from "./source-processing.service.js";
 import type { CreateSourceInput, ImportWebsiteInput, ImportYoutubeInput, ListSourcesQuery } from "./source.validator.js";
 import { getWorkspaceByIdForUser } from "../workspace/workspace.service.js";
@@ -24,19 +26,25 @@ export async function retrySourceForWorkspace(workspaceId: string, sourceId: str
     if (source.status !== "FAILED") {
         throw new ConflictError("Only failed sources can be retried");
     }
+    await updateSourceRecord(sourceId, { status: "PENDING" });
     await enqueueSourceProcessing({ sourceId, workspaceId });
     return { sourceId, status: "QUEUED" as const };
 }
 
-async function createAndProcessSource(
+export async function createAndProcessSource(
     data: Parameters<typeof createSourceRecord>[0],
 ) {
     const source = await createSourceRecord(data); //
 
-    await enqueueSourceProcessing({
-        sourceId: source.id,
-        workspaceId: source.workspaceId,
-    });
+    try {
+        await enqueueSourceProcessing({ sourceId: source.id, workspaceId: sourceIndexNamespace(source) });
+    } catch (error) {
+        await deleteSourceRecord(source.id);
+        try { await deleteUploadedPdf(source.metadata); }
+        catch (cleanupError) { console.error("Failed to clean up rejected source PDF", cleanupError); }
+        console.error("Source event could not be queued", error);
+        throw new AppError(503, "Source upload failed. Please try again.");
+    }
 
     return source;
 }
@@ -72,8 +80,11 @@ export async function deleteSourceForWorkspace(
     sourceId: string,
     userId: string,
 ) {
-    await getSourceForWorkspace(workspaceId, sourceId, userId);
+    const source = await getSourceForWorkspace(workspaceId, sourceId, userId);
     await removeSourceFromIndex(workspaceId, sourceId);
+    if (source.type === "PDF" && source.metadata) {
+        await deleteUploadedPdf(source.metadata);
+    }
     await deleteSourceRecord(sourceId);
 }
 
@@ -111,7 +122,7 @@ export async function importWebsiteSource(
     userId: string,
     input: ImportWebsiteInput,
 ) {
-    await getWorkspaceByIdForUser(workspaceId, userId);
+    await assertWorkspaceAccess(workspaceId, userId);
 
     const scraped = await scrapeWebsite(input.url);
 
@@ -134,23 +145,21 @@ export async function uploadPdfSource(
     file: Express.Multer.File,
     title?: string,
 ) {
-    await getWorkspaceByIdForUser(workspaceId, userId);
+    await assertWorkspaceAccess(workspaceId, userId);
 
-    const upload = await uploadPdfToCloudinary(
-        file.buffer,
-        file.originalname,
-    );
-
-    let content: string | null = null;
+    let content: string;
     let pageCount: number | undefined;
 
     try {
         const extracted = await extractPdfFromBuffer(file.buffer);
         content = extracted.text;
         pageCount = extracted.pageCount;
-    } catch {
-        // Inngest will retry extraction from Cloudinary if upload-time parse fails.
+    } catch (error) {
+        console.error("Uploaded PDF text extraction failed", error);
+        throw new ValidationError("We couldn’t read text from this PDF. Use a PDF with selectable text, and make sure it isn’t password-protected.");
     }
+
+    const upload = await uploadPdfToCloudinary(file.buffer, file.originalname);
 
     return createAndProcessSource({
         workspaceId,
@@ -175,7 +184,7 @@ export async function importYoutubeSource(
     userId: string,
     input: ImportYoutubeInput,
 ) {
-    await getWorkspaceByIdForUser(workspaceId, userId);
+    await assertWorkspaceAccess(workspaceId, userId);
 
     const transcript = await fetchYoutubeTranscript(input.url);
 

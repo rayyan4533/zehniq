@@ -30,7 +30,7 @@ export type Mem0Message = {
     content: string;
 };
 
-/** Normalized memory record returned by Chaibook memory APIs. */
+/** Normalized memory record returned by zehniq. memory APIs. */
 export type AppMemory = {
     id: string;
     memory: string;
@@ -160,10 +160,10 @@ export async function addUserMemory(
 }
 
 /**
- * Extracts inferred memories from a conversation transcript (fire-and-forget in chat).
+ * Extracts inferred memories from user-authored messages only (fire-and-forget in chat).
  *
  * @param userId - Owner of extracted memories
- * @param messages - Recent user/assistant turns
+ * @param messages - Recent turns; assistant messages are excluded before sending
  * @param metadata - Optional metadata (e.g. `{ source: "learned", conversationId }`)
  * @returns Resolves immediately when Mem0 is off or messages are empty
  *
@@ -173,11 +173,12 @@ export async function addMemoriesFromMessages(
     messages: Mem0Message[],
     metadata?: Record<string, unknown>,
 ) {
-    if (!process.env.MEM0_API_KEY?.trim() || messages.length === 0) {
+    const userMessages = messages.filter((message) => message.role === "user");
+    if (!process.env.MEM0_API_KEY?.trim() || userMessages.length === 0) {
         return;
     }
 
-    await getMem0Client().add(messages, {
+    await getMem0Client().add(userMessages, {
         userId,
         infer: true,
         ...(metadata !== undefined ? { metadata } : {}),

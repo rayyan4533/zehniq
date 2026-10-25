@@ -5,13 +5,23 @@ import { test } from "node:test";
 process.env.MEM0_TELEMETRY = "false";
 process.env.MEM0_API_KEY = "local-test-key";
 const { MemoryClient } = await import("mem0ai");
-const { addUserMemory, getMem0Client } = await import("../src/lib/mem0.ts");
+const { addUserMemory, addMemoriesFromMessages, getMem0Client } = await import("../src/lib/mem0.ts");
 const { updateMemoryForUser, deleteMemoryForUser } = await import("../src/modules/memory/memory.service.ts");
 
 test("Mem0 integration", async (t) => {
     t.mock.method(MemoryClient.prototype, "ping", async () => ({}));
     const client = getMem0Client();
     await client.initialized;
+
+    await t.test("automatic extraction sends only user messages and skips assistant-only exchanges", async (t) => {
+        const add = t.mock.method(client, "add", async () => ({}));
+        const userMessage = { role: "user", content: "I prefer short examples" };
+        await addMemoriesFromMessages("alice", [userMessage, { role: "assistant", content: "An assistant assumption" }], { source: "learned" });
+        assert.deepEqual(add.mock.calls[0].arguments, [[userMessage], { userId: "alice", infer: true, metadata: { source: "learned" } }]);
+        await addMemoriesFromMessages("alice", [{ role: "assistant", content: "An assistant assumption" }]);
+        await addMemoriesFromMessages("alice", []);
+        assert.equal(add.mock.callCount(), 1);
+    });
 
     await t.test("manual creation accepts the v3 envelope and reloads the full record", async (t) => {
         const add = t.mock.method(client, "add", async () => ({

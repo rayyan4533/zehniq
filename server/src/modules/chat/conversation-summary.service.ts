@@ -69,8 +69,8 @@ export async function summarizeConversationById(
         summaryMessageCount: messages.length,
     });
 
-    const recentMessages = messages.slice(-16).map((message) => ({
-        role: message.role.toLowerCase() as "user" | "assistant",
+    const recentMessages = messages.slice(-16).filter((message) => message.role === "USER").map((message) => ({
+        role: "user" as const,
         content: message.content,
     }));
 

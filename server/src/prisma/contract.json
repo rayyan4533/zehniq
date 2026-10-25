@@ -16,8 +16,24 @@
       "model": "LearningArtifact",
       "namespace": "public"
     },
+    "learning_roadmap": {
+      "model": "LearningRoadmap",
+      "namespace": "public"
+    },
     "message": {
       "model": "Message",
+      "namespace": "public"
+    },
+    "roadmap_activity": {
+      "model": "RoadmapActivity",
+      "namespace": "public"
+    },
+    "roadmap_collection": {
+      "model": "RoadmapCollection",
+      "namespace": "public"
+    },
+    "roadmap_task_progress": {
+      "model": "RoadmapTaskProgress",
       "namespace": "public"
     },
     "session": {
@@ -584,6 +600,236 @@
               "table": "learning_artifact"
             }
           },
+          "LearningRoadmap": {
+            "fields": {
+              "analysis": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/json@1",
+                  "kind": "scalar"
+                }
+              },
+              "collectionId": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "content": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/json@1",
+                  "kind": "scalar"
+                }
+              },
+              "createdAt": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "kind": "scalar"
+                }
+              },
+              "durationMonths": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/int4@1",
+                  "kind": "scalar"
+                }
+              },
+              "generationError": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "id": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "limitations": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/json@1",
+                  "kind": "scalar"
+                }
+              },
+              "phase": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "sourceIds": {
+                "many": {
+                  "elementNullable": false
+                },
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "status": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "title": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "topicGoals": {
+                "many": {
+                  "elementNullable": false
+                },
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "updatedAt": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "kind": "scalar"
+                }
+              },
+              "workspaceId": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              }
+            },
+            "relations": {
+              "activities": {
+                "cardinality": "1:N",
+                "on": {
+                  "localFields": [
+                    "id"
+                  ],
+                  "targetFields": [
+                    "roadmapId"
+                  ]
+                },
+                "to": {
+                  "model": "RoadmapActivity",
+                  "namespace": "public"
+                }
+              },
+              "collection": {
+                "cardinality": "N:1",
+                "nullable": true,
+                "on": {
+                  "localFields": [
+                    "collectionId"
+                  ],
+                  "targetFields": [
+                    "id"
+                  ]
+                },
+                "to": {
+                  "model": "RoadmapCollection",
+                  "namespace": "public"
+                }
+              },
+              "progress": {
+                "cardinality": "1:N",
+                "on": {
+                  "localFields": [
+                    "id"
+                  ],
+                  "targetFields": [
+                    "roadmapId"
+                  ]
+                },
+                "to": {
+                  "model": "RoadmapTaskProgress",
+                  "namespace": "public"
+                }
+              },
+              "workspace": {
+                "cardinality": "N:1",
+                "nullable": true,
+                "on": {
+                  "localFields": [
+                    "workspaceId"
+                  ],
+                  "targetFields": [
+                    "id"
+                  ]
+                },
+                "to": {
+                  "model": "Workspace",
+                  "namespace": "public"
+                }
+              }
+            },
+            "storage": {
+              "fields": {
+                "analysis": {
+                  "column": "analysis"
+                },
+                "collectionId": {
+                  "column": "collectionId"
+                },
+                "content": {
+                  "column": "content"
+                },
+                "createdAt": {
+                  "column": "createdAt"
+                },
+                "durationMonths": {
+                  "column": "durationMonths"
+                },
+                "generationError": {
+                  "column": "generationError"
+                },
+                "id": {
+                  "column": "id"
+                },
+                "limitations": {
+                  "column": "limitations"
+                },
+                "phase": {
+                  "column": "phase"
+                },
+                "sourceIds": {
+                  "column": "sourceIds"
+                },
+                "status": {
+                  "column": "status"
+                },
+                "title": {
+                  "column": "title"
+                },
+                "topicGoals": {
+                  "column": "topicGoals"
+                },
+                "updatedAt": {
+                  "column": "updatedAt"
+                },
+                "workspaceId": {
+                  "column": "workspaceId"
+                }
+              },
+              "namespaceId": "public",
+              "table": "learning_roadmap"
+            }
+          },
           "Message": {
             "fields": {
               "citations": {
@@ -676,6 +922,290 @@
               },
               "namespaceId": "public",
               "table": "message"
+            }
+          },
+          "RoadmapActivity": {
+            "fields": {
+              "createdAt": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "kind": "scalar"
+                }
+              },
+              "id": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "kind": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "resourceId": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "roadmapId": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "taskId": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              }
+            },
+            "relations": {
+              "roadmap": {
+                "cardinality": "N:1",
+                "nullable": false,
+                "on": {
+                  "localFields": [
+                    "roadmapId"
+                  ],
+                  "targetFields": [
+                    "id"
+                  ]
+                },
+                "to": {
+                  "model": "LearningRoadmap",
+                  "namespace": "public"
+                }
+              }
+            },
+            "storage": {
+              "fields": {
+                "createdAt": {
+                  "column": "createdAt"
+                },
+                "id": {
+                  "column": "id"
+                },
+                "kind": {
+                  "column": "kind"
+                },
+                "resourceId": {
+                  "column": "resourceId"
+                },
+                "roadmapId": {
+                  "column": "roadmapId"
+                },
+                "taskId": {
+                  "column": "taskId"
+                }
+              },
+              "namespaceId": "public",
+              "table": "roadmap_activity"
+            }
+          },
+          "RoadmapCollection": {
+            "fields": {
+              "createdAt": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "kind": "scalar"
+                }
+              },
+              "id": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "title": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "updatedAt": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "kind": "scalar"
+                }
+              },
+              "userId": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              }
+            },
+            "relations": {
+              "roadmaps": {
+                "cardinality": "1:N",
+                "on": {
+                  "localFields": [
+                    "id"
+                  ],
+                  "targetFields": [
+                    "collectionId"
+                  ]
+                },
+                "to": {
+                  "model": "LearningRoadmap",
+                  "namespace": "public"
+                }
+              },
+              "sources": {
+                "cardinality": "1:N",
+                "on": {
+                  "localFields": [
+                    "id"
+                  ],
+                  "targetFields": [
+                    "collectionId"
+                  ]
+                },
+                "to": {
+                  "model": "Source",
+                  "namespace": "public"
+                }
+              },
+              "user": {
+                "cardinality": "N:1",
+                "nullable": false,
+                "on": {
+                  "localFields": [
+                    "userId"
+                  ],
+                  "targetFields": [
+                    "id"
+                  ]
+                },
+                "to": {
+                  "model": "User",
+                  "namespace": "public"
+                }
+              }
+            },
+            "storage": {
+              "fields": {
+                "createdAt": {
+                  "column": "createdAt"
+                },
+                "id": {
+                  "column": "id"
+                },
+                "title": {
+                  "column": "title"
+                },
+                "updatedAt": {
+                  "column": "updatedAt"
+                },
+                "userId": {
+                  "column": "userId"
+                }
+              },
+              "namespaceId": "public",
+              "table": "roadmap_collection"
+            }
+          },
+          "RoadmapTaskProgress": {
+            "fields": {
+              "completedAt": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "kind": "scalar"
+                }
+              },
+              "id": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "isCompleted": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/bool@1",
+                  "kind": "scalar"
+                }
+              },
+              "roadmapId": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "taskId": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "updatedAt": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "kind": "scalar"
+                }
+              }
+            },
+            "relations": {
+              "roadmap": {
+                "cardinality": "N:1",
+                "nullable": false,
+                "on": {
+                  "localFields": [
+                    "roadmapId"
+                  ],
+                  "targetFields": [
+                    "id"
+                  ]
+                },
+                "to": {
+                  "model": "LearningRoadmap",
+                  "namespace": "public"
+                }
+              }
+            },
+            "storage": {
+              "fields": {
+                "completedAt": {
+                  "column": "completedAt"
+                },
+                "id": {
+                  "column": "id"
+                },
+                "isCompleted": {
+                  "column": "isCompleted"
+                },
+                "roadmapId": {
+                  "column": "roadmapId"
+                },
+                "taskId": {
+                  "column": "taskId"
+                },
+                "updatedAt": {
+                  "column": "updatedAt"
+                }
+              },
+              "namespaceId": "public",
+              "table": "roadmap_task_progress"
             }
           },
           "Session": {
@@ -788,6 +1318,13 @@
           },
           "Source": {
             "fields": {
+              "collectionId": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
               "content": {
                 "nullable": true,
                 "type": {
@@ -864,7 +1401,7 @@
                 }
               },
               "workspaceId": {
-                "nullable": false,
+                "nullable": true,
                 "type": {
                   "codecId": "pg/text@1",
                   "kind": "scalar"
@@ -887,9 +1424,25 @@
                   "namespace": "public"
                 }
               },
+              "collection": {
+                "cardinality": "N:1",
+                "nullable": true,
+                "on": {
+                  "localFields": [
+                    "collectionId"
+                  ],
+                  "targetFields": [
+                    "id"
+                  ]
+                },
+                "to": {
+                  "model": "RoadmapCollection",
+                  "namespace": "public"
+                }
+              },
               "workspace": {
                 "cardinality": "N:1",
-                "nullable": false,
+                "nullable": true,
                 "on": {
                   "localFields": [
                     "workspaceId"
@@ -906,6 +1459,9 @@
             },
             "storage": {
               "fields": {
+                "collectionId": {
+                  "column": "collectionId"
+                },
                 "content": {
                   "column": "content"
                 },
@@ -1104,6 +1660,21 @@
                 },
                 "to": {
                   "model": "Account",
+                  "namespace": "public"
+                }
+              },
+              "roadmapCollections": {
+                "cardinality": "1:N",
+                "on": {
+                  "localFields": [
+                    "id"
+                  ],
+                  "targetFields": [
+                    "userId"
+                  ]
+                },
+                "to": {
+                  "model": "RoadmapCollection",
                   "namespace": "public"
                 }
               },
@@ -1309,6 +1880,21 @@
                 },
                 "to": {
                   "model": "Conversation",
+                  "namespace": "public"
+                }
+              },
+              "roadmaps": {
+                "cardinality": "1:N",
+                "on": {
+                  "localFields": [
+                    "id"
+                  ],
+                  "targetFields": [
+                    "workspaceId"
+                  ]
+                },
+                "to": {
+                  "model": "LearningRoadmap",
                   "namespace": "public"
                 }
               },
@@ -1736,6 +2322,206 @@
               },
               "uniques": []
             },
+            "learning_roadmap": {
+              "checks": [
+                {
+                  "expression": "array_position(\"sourceIds\", NULL) IS NULL",
+                  "name": "learning_roadmap_sourceIds_elem_not_null_07253a8e",
+                  "prefix": "learning_roadmap_sourceIds_elem_not_null"
+                },
+                {
+                  "expression": "array_position(\"topicGoals\", NULL) IS NULL",
+                  "name": "learning_roadmap_topicGoals_elem_not_null_473e5449",
+                  "prefix": "learning_roadmap_topicGoals_elem_not_null"
+                }
+              ],
+              "columns": {
+                "analysis": {
+                  "codecId": "pg/json@1",
+                  "dataType": "pg/json",
+                  "nullable": true
+                },
+                "collectionId": {
+                  "codecId": "pg/text@1",
+                  "dataType": "pg/text",
+                  "nullable": true
+                },
+                "content": {
+                  "codecId": "pg/json@1",
+                  "dataType": "pg/json",
+                  "nullable": true
+                },
+                "createdAt": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "dataType": "pg/timestamptz",
+                  "default": {
+                    "expression": "now()",
+                    "kind": "function"
+                  },
+                  "nullable": false
+                },
+                "durationMonths": {
+                  "codecId": "pg/int4@1",
+                  "dataType": "pg/int4",
+                  "nullable": false
+                },
+                "generationError": {
+                  "codecId": "pg/text@1",
+                  "dataType": "pg/text",
+                  "nullable": true
+                },
+                "id": {
+                  "codecId": "pg/text@1",
+                  "dataType": "pg/text",
+                  "nullable": false
+                },
+                "limitations": {
+                  "codecId": "pg/json@1",
+                  "dataType": "pg/json",
+                  "nullable": true
+                },
+                "phase": {
+                  "codecId": "pg/text@1",
+                  "dataType": "pg/text",
+                  "default": {
+                    "kind": "literal",
+                    "value": "analyzing"
+                  },
+                  "nullable": false
+                },
+                "sourceIds": {
+                  "codecId": "pg/text@1",
+                  "dataType": "pg/text",
+                  "many": {
+                    "elementNullable": false
+                  },
+                  "nullable": false
+                },
+                "status": {
+                  "codecId": "pg/text@1",
+                  "dataType": "pg/text",
+                  "default": {
+                    "kind": "literal",
+                    "value": "generating"
+                  },
+                  "nullable": false
+                },
+                "title": {
+                  "codecId": "pg/text@1",
+                  "dataType": "pg/text",
+                  "nullable": false
+                },
+                "topicGoals": {
+                  "codecId": "pg/text@1",
+                  "dataType": "pg/text",
+                  "default": {
+                    "kind": "literal",
+                    "value": []
+                  },
+                  "many": {
+                    "elementNullable": false
+                  },
+                  "nullable": false
+                },
+                "updatedAt": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "dataType": "pg/timestamptz",
+                  "nullable": false
+                },
+                "workspaceId": {
+                  "codecId": "pg/text@1",
+                  "dataType": "pg/text",
+                  "nullable": true
+                }
+              },
+              "foreignKeys": [
+                {
+                  "onDelete": "cascade",
+                  "source": {
+                    "columns": [
+                      "workspaceId"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "learning_roadmap"
+                  },
+                  "target": {
+                    "columns": [
+                      "id"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "workspace"
+                  }
+                },
+                {
+                  "onDelete": "cascade",
+                  "source": {
+                    "columns": [
+                      "collectionId"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "learning_roadmap"
+                  },
+                  "target": {
+                    "columns": [
+                      "id"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "roadmap_collection"
+                  }
+                }
+              ],
+              "indexes": [
+                {
+                  "columns": [
+                    "collectionId",
+                    "createdAt"
+                  ],
+                  "name": "learning_roadmap_collectionId_createdAt_idx_8cc402d6",
+                  "prefix": "learning_roadmap_collectionId_createdAt_idx",
+                  "unique": false
+                },
+                {
+                  "columns": [
+                    "collectionId"
+                  ],
+                  "name": "learning_roadmap_collectionId_idx_b344fc1a",
+                  "prefix": "learning_roadmap_collectionId_idx",
+                  "unique": false
+                },
+                {
+                  "columns": [
+                    "workspaceId",
+                    "createdAt"
+                  ],
+                  "name": "learning_roadmap_workspaceId_createdAt_idx_5ff7e893",
+                  "prefix": "learning_roadmap_workspaceId_createdAt_idx",
+                  "unique": false
+                },
+                {
+                  "columns": [
+                    "workspaceId"
+                  ],
+                  "name": "learning_roadmap_workspaceId_idx_ba65f874",
+                  "prefix": "learning_roadmap_workspaceId_idx",
+                  "unique": false
+                },
+                {
+                  "columns": [
+                    "workspaceId",
+                    "status"
+                  ],
+                  "name": "learning_roadmap_workspaceId_status_idx_76d68132",
+                  "prefix": "learning_roadmap_workspaceId_status_idx",
+                  "unique": false
+                }
+              ],
+              "primaryKey": {
+                "columns": [
+                  "id"
+                ]
+              },
+              "uniques": []
+            },
             "message": {
               "checks": [
                 {
@@ -1830,6 +2616,245 @@
                 ]
               },
               "uniques": []
+            },
+            "roadmap_activity": {
+              "columns": {
+                "createdAt": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "dataType": "pg/timestamptz",
+                  "default": {
+                    "expression": "now()",
+                    "kind": "function"
+                  },
+                  "nullable": false
+                },
+                "id": {
+                  "codecId": "pg/text@1",
+                  "dataType": "pg/text",
+                  "nullable": false
+                },
+                "kind": {
+                  "codecId": "pg/text@1",
+                  "dataType": "pg/text",
+                  "nullable": false
+                },
+                "resourceId": {
+                  "codecId": "pg/text@1",
+                  "dataType": "pg/text",
+                  "nullable": true
+                },
+                "roadmapId": {
+                  "codecId": "pg/text@1",
+                  "dataType": "pg/text",
+                  "nullable": false
+                },
+                "taskId": {
+                  "codecId": "pg/text@1",
+                  "dataType": "pg/text",
+                  "nullable": true
+                }
+              },
+              "foreignKeys": [
+                {
+                  "onDelete": "cascade",
+                  "source": {
+                    "columns": [
+                      "roadmapId"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "roadmap_activity"
+                  },
+                  "target": {
+                    "columns": [
+                      "id"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "learning_roadmap"
+                  }
+                }
+              ],
+              "indexes": [
+                {
+                  "columns": [
+                    "roadmapId",
+                    "createdAt"
+                  ],
+                  "name": "roadmap_activity_roadmapId_createdAt_idx_ee1c3de0",
+                  "prefix": "roadmap_activity_roadmapId_createdAt_idx",
+                  "unique": false
+                },
+                {
+                  "columns": [
+                    "roadmapId"
+                  ],
+                  "name": "roadmap_activity_roadmapId_idx_be7128ae",
+                  "prefix": "roadmap_activity_roadmapId_idx",
+                  "unique": false
+                }
+              ],
+              "primaryKey": {
+                "columns": [
+                  "id"
+                ]
+              },
+              "uniques": []
+            },
+            "roadmap_collection": {
+              "columns": {
+                "createdAt": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "dataType": "pg/timestamptz",
+                  "default": {
+                    "expression": "now()",
+                    "kind": "function"
+                  },
+                  "nullable": false
+                },
+                "id": {
+                  "codecId": "pg/text@1",
+                  "dataType": "pg/text",
+                  "nullable": false
+                },
+                "title": {
+                  "codecId": "pg/text@1",
+                  "dataType": "pg/text",
+                  "nullable": false
+                },
+                "updatedAt": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "dataType": "pg/timestamptz",
+                  "nullable": false
+                },
+                "userId": {
+                  "codecId": "pg/text@1",
+                  "dataType": "pg/text",
+                  "nullable": false
+                }
+              },
+              "foreignKeys": [
+                {
+                  "onDelete": "cascade",
+                  "source": {
+                    "columns": [
+                      "userId"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "roadmap_collection"
+                  },
+                  "target": {
+                    "columns": [
+                      "id"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "user"
+                  }
+                }
+              ],
+              "indexes": [
+                {
+                  "columns": [
+                    "userId"
+                  ],
+                  "name": "roadmap_collection_userId_idx_a489d58a",
+                  "prefix": "roadmap_collection_userId_idx",
+                  "unique": false
+                },
+                {
+                  "columns": [
+                    "userId",
+                    "updatedAt"
+                  ],
+                  "name": "roadmap_collection_userId_updatedAt_idx_42f5280d",
+                  "prefix": "roadmap_collection_userId_updatedAt_idx",
+                  "unique": false
+                }
+              ],
+              "primaryKey": {
+                "columns": [
+                  "id"
+                ]
+              },
+              "uniques": []
+            },
+            "roadmap_task_progress": {
+              "columns": {
+                "completedAt": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "dataType": "pg/timestamptz",
+                  "nullable": true
+                },
+                "id": {
+                  "codecId": "pg/text@1",
+                  "dataType": "pg/text",
+                  "nullable": false
+                },
+                "isCompleted": {
+                  "codecId": "pg/bool@1",
+                  "dataType": "pg/bool",
+                  "default": {
+                    "kind": "literal",
+                    "value": false
+                  },
+                  "nullable": false
+                },
+                "roadmapId": {
+                  "codecId": "pg/text@1",
+                  "dataType": "pg/text",
+                  "nullable": false
+                },
+                "taskId": {
+                  "codecId": "pg/text@1",
+                  "dataType": "pg/text",
+                  "nullable": false
+                },
+                "updatedAt": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "dataType": "pg/timestamptz",
+                  "nullable": false
+                }
+              },
+              "foreignKeys": [
+                {
+                  "onDelete": "cascade",
+                  "source": {
+                    "columns": [
+                      "roadmapId"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "roadmap_task_progress"
+                  },
+                  "target": {
+                    "columns": [
+                      "id"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "learning_roadmap"
+                  }
+                }
+              ],
+              "indexes": [
+                {
+                  "columns": [
+                    "roadmapId"
+                  ],
+                  "name": "roadmap_task_progress_roadmapId_idx_be7128ae",
+                  "prefix": "roadmap_task_progress_roadmapId_idx",
+                  "unique": false
+                }
+              ],
+              "primaryKey": {
+                "columns": [
+                  "id"
+                ]
+              },
+              "uniques": [
+                {
+                  "columns": [
+                    "roadmapId",
+                    "taskId"
+                  ]
+                }
+              ]
             },
             "session": {
               "columns": {
@@ -1936,6 +2961,11 @@
                 }
               ],
               "columns": {
+                "collectionId": {
+                  "codecId": "pg/text@1",
+                  "dataType": "pg/text",
+                  "nullable": true
+                },
                 "content": {
                   "codecId": "pg/text@1",
                   "dataType": "pg/text",
@@ -2004,7 +3034,7 @@
                 "workspaceId": {
                   "codecId": "pg/text@1",
                   "dataType": "pg/text",
-                  "nullable": false
+                  "nullable": true
                 }
               },
               "foreignKeys": [
@@ -2024,9 +3054,43 @@
                     "namespaceId": "public",
                     "tableName": "workspace"
                   }
+                },
+                {
+                  "onDelete": "cascade",
+                  "source": {
+                    "columns": [
+                      "collectionId"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "source"
+                  },
+                  "target": {
+                    "columns": [
+                      "id"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "roadmap_collection"
+                  }
                 }
               ],
               "indexes": [
+                {
+                  "columns": [
+                    "collectionId"
+                  ],
+                  "name": "source_collectionId_idx_b344fc1a",
+                  "prefix": "source_collectionId_idx",
+                  "unique": false
+                },
+                {
+                  "columns": [
+                    "collectionId",
+                    "status"
+                  ],
+                  "name": "source_collectionId_status_idx_11b1d1f5",
+                  "prefix": "source_collectionId_status_idx",
+                  "unique": false
+                },
                 {
                   "columns": [
                     "workspaceId"
@@ -2409,10 +3473,10 @@
         "kind": "postgres-schema"
       }
     },
-    "storageHash": "12ea62d85fb6cb13bc29d975918d43f4a8b15e8f7c377579ae28a3064ae16da1"
+    "storageHash": "f4979764c963546a04b08b4c003a0df7d1ef39926e1d64f9f81a45040cb98549"
   },
   "execution": {
-    "executionHash": "1c5478c038c37c7530d86c475519c8f814151e6470d4ca647732a361dacee963",
+    "executionHash": "6fd309255899b773e086e2dc52041bbd2bf9b2da3e4951c93691e437ac12824e",
     "mutations": {
       "defaults": [
         {
@@ -2473,8 +3537,97 @@
             "kind": "generator"
           },
           "ref": {
+            "entry": "learning_roadmap",
+            "field": "id",
+            "namespace": "public"
+          }
+        },
+        {
+          "onCreate": {
+            "id": "instantNow",
+            "kind": "generator"
+          },
+          "onUpdate": {
+            "id": "instantNow",
+            "kind": "generator"
+          },
+          "ref": {
+            "entry": "learning_roadmap",
+            "field": "updatedAt",
+            "namespace": "public"
+          }
+        },
+        {
+          "onCreate": {
+            "id": "cuid2",
+            "kind": "generator"
+          },
+          "ref": {
             "entry": "message",
             "field": "id",
+            "namespace": "public"
+          }
+        },
+        {
+          "onCreate": {
+            "id": "cuid2",
+            "kind": "generator"
+          },
+          "ref": {
+            "entry": "roadmap_activity",
+            "field": "id",
+            "namespace": "public"
+          }
+        },
+        {
+          "onCreate": {
+            "id": "cuid2",
+            "kind": "generator"
+          },
+          "ref": {
+            "entry": "roadmap_collection",
+            "field": "id",
+            "namespace": "public"
+          }
+        },
+        {
+          "onCreate": {
+            "id": "instantNow",
+            "kind": "generator"
+          },
+          "onUpdate": {
+            "id": "instantNow",
+            "kind": "generator"
+          },
+          "ref": {
+            "entry": "roadmap_collection",
+            "field": "updatedAt",
+            "namespace": "public"
+          }
+        },
+        {
+          "onCreate": {
+            "id": "cuid2",
+            "kind": "generator"
+          },
+          "ref": {
+            "entry": "roadmap_task_progress",
+            "field": "id",
+            "namespace": "public"
+          }
+        },
+        {
+          "onCreate": {
+            "id": "instantNow",
+            "kind": "generator"
+          },
+          "onUpdate": {
+            "id": "instantNow",
+            "kind": "generator"
+          },
+          "ref": {
+            "entry": "roadmap_task_progress",
+            "field": "updatedAt",
             "namespace": "public"
           }
         },

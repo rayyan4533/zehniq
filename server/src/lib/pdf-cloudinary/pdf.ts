@@ -7,11 +7,19 @@ export type PdfExtractResult = {
     pageCount: number;
 };
 
+class PdfDownloadError extends Error {
+    constructor(readonly status: number) {
+        super(status === 401 || status === 403
+            ? "Cloudinary blocked access to this PDF. Check the product environment’s Security settings for PDF delivery and the asset’s access permissions."
+            : "The stored PDF could not be downloaded. Please try uploading it again.");
+    }
+}
+
 async function downloadPdf(url: string) {
     const response = await fetch(url);
 
     if (!response.ok) {
-        throw new Error(`Failed to download PDF (${response.status})`);
+        throw new PdfDownloadError(response.status);
     }
 
     return response.arrayBuffer();
@@ -58,7 +66,7 @@ export async function extractPdfFromCloudinary(input: {
         return await extractPdfFromBuffer(buffer);
     } catch (error) {
         const isUnauthorized =
-            error instanceof Error && error.message.includes("(401)");
+            error instanceof PdfDownloadError && (error.status === 401 || error.status === 403);
 
         if (!isUnauthorized || !input.publicId) {
             throw error;

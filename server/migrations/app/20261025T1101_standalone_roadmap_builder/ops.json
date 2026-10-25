@@ -1,0 +1,655 @@
+[
+  {
+    "id": "table.roadmap_collection",
+    "label": "Create table \"roadmap_collection\"",
+    "summary": "Creates table \"roadmap_collection\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "roadmap_collection"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure table \"roadmap_collection\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"roadmap_collection\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create table \"roadmap_collection\"",
+        "sql": "CREATE TABLE \"public\".\"roadmap_collection\" (\n  \"createdAt\" timestamptz DEFAULT (now()) NOT NULL,\n  \"id\" text NOT NULL,\n  \"title\" text NOT NULL,\n  \"updatedAt\" timestamptz NOT NULL,\n  \"userId\" text NOT NULL,\n  PRIMARY KEY (\"id\")\n)",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify table \"roadmap_collection\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"roadmap_collection\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "column.public.learning_roadmap.collectionId",
+    "label": "Add column \"collectionId\" to \"learning_roadmap\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "column",
+        "name": "collectionId",
+        "table": "learning_roadmap"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure column \"collectionId\" is missing",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "learning_roadmap",
+          "collectionId"
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add column \"collectionId\"",
+        "sql": "ALTER TABLE \"public\".\"learning_roadmap\" ADD COLUMN \"collectionId\" text"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify column \"collectionId\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "learning_roadmap",
+          "collectionId"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "column.public.learning_roadmap.topicGoals",
+    "label": "Add column \"topicGoals\" to \"learning_roadmap\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "column",
+        "name": "topicGoals",
+        "table": "learning_roadmap"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure column \"topicGoals\" is missing",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "learning_roadmap",
+          "topicGoals"
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add column \"topicGoals\"",
+        "sql": "ALTER TABLE \"public\".\"learning_roadmap\" ADD COLUMN \"topicGoals\" text[] DEFAULT '{}' NOT NULL"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify column \"topicGoals\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "learning_roadmap",
+          "topicGoals"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "column.public.source.collectionId",
+    "label": "Add column \"collectionId\" to \"source\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "column",
+        "name": "collectionId",
+        "table": "source"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure column \"collectionId\" is missing",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "source",
+          "collectionId"
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add column \"collectionId\"",
+        "sql": "ALTER TABLE \"public\".\"source\" ADD COLUMN \"collectionId\" text"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify column \"collectionId\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "source",
+          "collectionId"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "alterNullability.dropNotNull.learning_roadmap.workspaceId",
+    "label": "Drop NOT NULL on \"learning_roadmap\".\"workspaceId\"",
+    "operationClass": "widening",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "column",
+        "name": "workspaceId",
+        "table": "learning_roadmap"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure column \"workspaceId\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "learning_roadmap",
+          "workspaceId"
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "drop NOT NULL on \"workspaceId\"",
+        "sql": "ALTER TABLE \"public\".\"learning_roadmap\" ALTER COLUMN \"workspaceId\" DROP NOT NULL"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify column \"workspaceId\" is nullable",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3 AND \"is_nullable\" = $4)) AS \"result\"",
+        "params": [
+          "public",
+          "learning_roadmap",
+          "workspaceId",
+          "YES"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "alterNullability.dropNotNull.source.workspaceId",
+    "label": "Drop NOT NULL on \"source\".\"workspaceId\"",
+    "operationClass": "widening",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "column",
+        "name": "workspaceId",
+        "table": "source"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure column \"workspaceId\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "source",
+          "workspaceId"
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "drop NOT NULL on \"workspaceId\"",
+        "sql": "ALTER TABLE \"public\".\"source\" ALTER COLUMN \"workspaceId\" DROP NOT NULL"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify column \"workspaceId\" is nullable",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3 AND \"is_nullable\" = $4)) AS \"result\"",
+        "params": [
+          "public",
+          "source",
+          "workspaceId",
+          "YES"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "checkConstraint.learning_roadmap.learning_roadmap_topicGoals_elem_not_null_473e5449",
+    "label": "Add check constraint \"learning_roadmap_topicGoals_elem_not_null_473e5449\" on \"learning_roadmap\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "checkConstraint",
+        "name": "learning_roadmap_topicGoals_elem_not_null_473e5449",
+        "table": "learning_roadmap"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure constraint \"learning_roadmap_topicGoals_elem_not_null_473e5449\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "learning_roadmap_topicGoals_elem_not_null_473e5449",
+          "public",
+          "\"public\".\"learning_roadmap\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add check constraint \"learning_roadmap_topicGoals_elem_not_null_473e5449\"",
+        "sql": "ALTER TABLE \"public\".\"learning_roadmap\" ADD CONSTRAINT \"learning_roadmap_topicGoals_elem_not_null_473e5449\" CHECK (array_position(\"topicGoals\", NULL) IS NULL)"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify constraint \"learning_roadmap_topicGoals_elem_not_null_473e5449\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "learning_roadmap_topicGoals_elem_not_null_473e5449",
+          "public",
+          "\"public\".\"learning_roadmap\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.learning_roadmap.learning_roadmap_collectionId_createdAt_idx_8cc402d6",
+    "label": "Create index \"learning_roadmap_collectionId_createdAt_idx_8cc402d6\" on \"learning_roadmap\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "learning_roadmap_collectionId_createdAt_idx_8cc402d6",
+        "table": "learning_roadmap"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"learning_roadmap_collectionId_createdAt_idx_8cc402d6\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"learning_roadmap_collectionId_createdAt_idx_8cc402d6\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"learning_roadmap_collectionId_createdAt_idx_8cc402d6\"",
+        "sql": "CREATE INDEX \"learning_roadmap_collectionId_createdAt_idx_8cc402d6\" ON \"public\".\"learning_roadmap\" (\"collectionId\", \"createdAt\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"learning_roadmap_collectionId_createdAt_idx_8cc402d6\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"learning_roadmap_collectionId_createdAt_idx_8cc402d6\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.learning_roadmap.learning_roadmap_collectionId_idx_b344fc1a",
+    "label": "Create index \"learning_roadmap_collectionId_idx_b344fc1a\" on \"learning_roadmap\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "learning_roadmap_collectionId_idx_b344fc1a",
+        "table": "learning_roadmap"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"learning_roadmap_collectionId_idx_b344fc1a\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"learning_roadmap_collectionId_idx_b344fc1a\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"learning_roadmap_collectionId_idx_b344fc1a\"",
+        "sql": "CREATE INDEX \"learning_roadmap_collectionId_idx_b344fc1a\" ON \"public\".\"learning_roadmap\" (\"collectionId\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"learning_roadmap_collectionId_idx_b344fc1a\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"learning_roadmap_collectionId_idx_b344fc1a\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.roadmap_collection.roadmap_collection_userId_idx_a489d58a",
+    "label": "Create index \"roadmap_collection_userId_idx_a489d58a\" on \"roadmap_collection\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "roadmap_collection_userId_idx_a489d58a",
+        "table": "roadmap_collection"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"roadmap_collection_userId_idx_a489d58a\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"roadmap_collection_userId_idx_a489d58a\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"roadmap_collection_userId_idx_a489d58a\"",
+        "sql": "CREATE INDEX \"roadmap_collection_userId_idx_a489d58a\" ON \"public\".\"roadmap_collection\" (\"userId\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"roadmap_collection_userId_idx_a489d58a\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"roadmap_collection_userId_idx_a489d58a\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.roadmap_collection.roadmap_collection_userId_updatedAt_idx_42f5280d",
+    "label": "Create index \"roadmap_collection_userId_updatedAt_idx_42f5280d\" on \"roadmap_collection\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "roadmap_collection_userId_updatedAt_idx_42f5280d",
+        "table": "roadmap_collection"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"roadmap_collection_userId_updatedAt_idx_42f5280d\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"roadmap_collection_userId_updatedAt_idx_42f5280d\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"roadmap_collection_userId_updatedAt_idx_42f5280d\"",
+        "sql": "CREATE INDEX \"roadmap_collection_userId_updatedAt_idx_42f5280d\" ON \"public\".\"roadmap_collection\" (\"userId\", \"updatedAt\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"roadmap_collection_userId_updatedAt_idx_42f5280d\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"roadmap_collection_userId_updatedAt_idx_42f5280d\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.source.source_collectionId_idx_b344fc1a",
+    "label": "Create index \"source_collectionId_idx_b344fc1a\" on \"source\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "source_collectionId_idx_b344fc1a",
+        "table": "source"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"source_collectionId_idx_b344fc1a\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"source_collectionId_idx_b344fc1a\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"source_collectionId_idx_b344fc1a\"",
+        "sql": "CREATE INDEX \"source_collectionId_idx_b344fc1a\" ON \"public\".\"source\" (\"collectionId\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"source_collectionId_idx_b344fc1a\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"source_collectionId_idx_b344fc1a\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.source.source_collectionId_status_idx_11b1d1f5",
+    "label": "Create index \"source_collectionId_status_idx_11b1d1f5\" on \"source\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "source_collectionId_status_idx_11b1d1f5",
+        "table": "source"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"source_collectionId_status_idx_11b1d1f5\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"source_collectionId_status_idx_11b1d1f5\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"source_collectionId_status_idx_11b1d1f5\"",
+        "sql": "CREATE INDEX \"source_collectionId_status_idx_11b1d1f5\" ON \"public\".\"source\" (\"collectionId\", \"status\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"source_collectionId_status_idx_11b1d1f5\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"source_collectionId_status_idx_11b1d1f5\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.roadmap_collection.roadmap_collection_userId_fkey",
+    "label": "Add foreign key \"roadmap_collection_userId_fkey\" on \"roadmap_collection\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "roadmap_collection_userId_fkey",
+        "table": "roadmap_collection"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"roadmap_collection_userId_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "roadmap_collection_userId_fkey",
+          "public",
+          "\"public\".\"roadmap_collection\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"roadmap_collection_userId_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"roadmap_collection\"\nADD CONSTRAINT \"roadmap_collection_userId_fkey\"\nFOREIGN KEY (\"userId\")\nREFERENCES \"public\".\"user\" (\"id\")\nON DELETE CASCADE"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"roadmap_collection_userId_fkey\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "roadmap_collection_userId_fkey",
+          "public",
+          "\"public\".\"roadmap_collection\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.learning_roadmap.learning_roadmap_collectionId_fkey",
+    "label": "Add foreign key \"learning_roadmap_collectionId_fkey\" on \"learning_roadmap\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "learning_roadmap_collectionId_fkey",
+        "table": "learning_roadmap"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"learning_roadmap_collectionId_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "learning_roadmap_collectionId_fkey",
+          "public",
+          "\"public\".\"learning_roadmap\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"learning_roadmap_collectionId_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"learning_roadmap\"\nADD CONSTRAINT \"learning_roadmap_collectionId_fkey\"\nFOREIGN KEY (\"collectionId\")\nREFERENCES \"public\".\"roadmap_collection\" (\"id\")\nON DELETE CASCADE"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"learning_roadmap_collectionId_fkey\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "learning_roadmap_collectionId_fkey",
+          "public",
+          "\"public\".\"learning_roadmap\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.source.source_collectionId_fkey",
+    "label": "Add foreign key \"source_collectionId_fkey\" on \"source\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "source_collectionId_fkey",
+        "table": "source"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"source_collectionId_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "source_collectionId_fkey",
+          "public",
+          "\"public\".\"source\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"source_collectionId_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"source\"\nADD CONSTRAINT \"source_collectionId_fkey\"\nFOREIGN KEY (\"collectionId\")\nREFERENCES \"public\".\"roadmap_collection\" (\"id\")\nON DELETE CASCADE"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"source_collectionId_fkey\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "source_collectionId_fkey",
+          "public",
+          "\"public\".\"source\""
+        ]
+      }
+    ]
+  }
+]

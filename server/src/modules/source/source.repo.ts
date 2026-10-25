@@ -24,7 +24,8 @@ export type SourceStatus = "PENDING" | "PROCESSING" | "READY" | "FAILED";
 export type SourceRecord = Scalars<Models.public_Source>;
 
 export type CreateSourceData = {
-    workspaceId: string;
+    workspaceId?: string;
+    collectionId?: string;
     type: SourceType;
     title: string;
     content?: string | null;
@@ -40,10 +41,12 @@ export type UpdateSourceData = {
 };
 
 export async function createSourceRecord(data: CreateSourceData): Promise<SourceRecord> {
+    if (!!data.workspaceId === !!data.collectionId) throw new Error("A source must belong to exactly one notebook or standalone collection");
     const row = await db.orm.public.Source
         .select(
             "id",
             "workspaceId",
+            "collectionId",
             "type",
             "title",
             "content",
@@ -54,7 +57,8 @@ export async function createSourceRecord(data: CreateSourceData): Promise<Source
             "updatedAt",
         )
         .create({
-            workspaceId: data.workspaceId,
+            ...(data.workspaceId ? { workspaceId: data.workspaceId } : {}),
+            ...(data.collectionId ? { collectionId: data.collectionId } : {}),
             type: data.type,
             title: data.title,
             ...(data.content !== undefined ? { content: data.content } : {}),
@@ -75,6 +79,7 @@ export async function findSourcesByWorkspaceId(
         .select(
             "id",
             "workspaceId",
+            "collectionId",
             "type",
             "title",
             "content",
@@ -111,6 +116,7 @@ export async function findSourceByIdAndWorkspaceId(
         .select(
             "id",
             "workspaceId",
+            "collectionId",
             "type",
             "title",
             "content",
@@ -131,6 +137,7 @@ export async function findSourceById(sourceId: string): Promise<SourceRecord | n
         .select(
             "id",
             "workspaceId",
+            "collectionId",
             "type",
             "title",
             "content",
@@ -159,6 +166,7 @@ export async function updateSourceRecord(
         .select(
             "id",
             "workspaceId",
+            "collectionId",
             "type",
             "title",
             "content",

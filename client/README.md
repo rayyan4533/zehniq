@@ -1,36 +1,57 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# zehniq. client
 
-## Getting Started
+Learn it. Understand it. Own it.
 
-First, run the development server:
+## Learning roadmaps
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+Open a workspace and choose **Generate Roadmap**. Select ready sources and a 1-, 2-, or 3-month duration to generate 4, 8, or 12 weekly milestones. The **Roadmaps** workspace tab keeps previous plans, saved task progress, and learning analytics. Regenerating creates a new plan rather than replacing completed work.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Resources open beside the timeline on desktop and in a resource tab on mobile. Original PDFs use an authenticated API proxy; websites retain an external-tab fallback when embedding is blocked. Learning analytics show persisted completion, weekly progress, recent activity, resource visits, and estimated effort. Roadmaps require sign-in and the running API/Inngest services; preview mode does not fabricate generated plans.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Backend configuration, API details, and verification are documented in `server/docs/roadmaps.md`.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+A neo-brutalist learning workspace with light/dark themes. Built with Next.js,
+React, TanStack Query, the AI SDK, and Better Auth.
 
-## Learn More
+## Run locally
 
-To learn more about Next.js, take a look at the following resources:
+1. From `client/`, run `pnpm install`.
+2. Copy `.env.example` to `.env.local` if your backend is not at localhost:8081.
+3. Start the backend from `server/` with `pnpm dev`.
+4. Run `pnpm dev` from `client/`, then open http://localhost:3000.
+5. For source/artifact processing, also run the backend's Inngest dev server.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+`API_URL` is server-only and configures the Next.js `/api/*` rewrite. Secrets
+belong in `server/.env`; no provider keys should be put in the client.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Features
 
-## Deploy on Vercel
+- Notebook creation, editing, deletion, search, grid/list views.
+- Google sign-in through the existing Better Auth backend.
+- PDF, website, YouTube, text and Markdown ingestion with status polling.
+- Streaming source-grounded chat, history, citations, model selection, web search,
+  stop-generation, and Markdown export.
+- Summary, takeaway, flashcard, quiz, mind-map, and report viewers with JSON export.
+- User memory management.
+- Standalone Roadmap Builder at `/roadmaps`: direct source uploads, additional learning topics, or topics alone, with 1/2/3-month generation, saved progress, resource viewing, and analytics. Existing notebook roadmaps remain available separately in the sidebar.
+- Responsive layouts, keyboard-friendly dialogs, reduced motion support, and a
+  persisted light/dark theme.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+TanStack Query owns live API data, mutations, invalidation, and status-aware
+polling. AI SDK useChat manages the active response stream. Preview-only browser
+state is kept separately and never written into the authenticated query cache.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Without a session, the interface offers a clearly labeled local preview. Preview
+notebooks, notes, memories, and sample study artifacts persist in localStorage.
+Preview chat is a labeled example, not a real AI response. Sign in for live AI,
+PDF uploads, URL imports, and cloud memory. Preview sample artifacts are fixed
+examples for learning the interface rather than live generation from new notes.
+
+## Validation
+
+Responsive layout checks cover 320, 375, 540, 750, 768, 820, 1024, and 1280 pixel widths. Phones and tablets use a navigation drawer and switch between Sources, Chat, and Studio. Roadmap resources use tabs on compact screens. Page-level horizontal overflow is contained, while code blocks and interactive viewers retain their own scrolling. Dialogs and artifact viewers were also checked with long titles and content.
+
+`pnpm build` runs the production build and TypeScript checks. Browser QA covered
+light/dark themes, notebook navigation, flashcards, quiz feedback, and responsive
+workspace panels. OAuth and real provider operations require the backend and
+credentials and were not exercised during UI preview QA.

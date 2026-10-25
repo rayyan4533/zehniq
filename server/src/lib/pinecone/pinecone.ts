@@ -1,5 +1,6 @@
 import {
     Pinecone,
+    Errors,
     type Index,
     type PineconeRecord,
 } from "@pinecone-database/pinecone";
@@ -78,6 +79,10 @@ export async function ensurePineconeIndex() {
         await waitForIndexReady(indexName);
     }
 
+    const description = await client.describeIndex(indexName);
+    if (description.dimension !== EMBEDDING_DIMENSIONS) {
+        throw new Error(`Pinecone index "${indexName}" uses ${description.dimension} dimensions, but EMBEDDING_DIMENSIONS is ${EMBEDDING_DIMENSIONS}. Set EMBEDDING_DIMENSIONS to match the index.`);
+    }
     indexReady = true;
 }
 
@@ -142,9 +147,21 @@ export async function deleteSourceVectors(
     sourceId: string,
 ) {
     const index = await getPineconeIndex();
-    await index.namespace(workspaceId).deleteMany({
+    await deleteFromNamespace(index, workspaceId, () => index.namespace(workspaceId).deleteMany({
         filter: { sourceId: { $eq: sourceId } },
-    });
+    }));
+}
+
+// A namespace is created by its first upsert. Confirm absence after a 404 so
+// missing indexes, authentication failures, and other errors still propagate.
+async function deleteFromNamespace(index: Index, workspaceId: string, remove: () => Promise<void>) {
+    try {
+        await remove();
+    } catch (error) {
+        if (!(error instanceof Errors.PineconeNotFoundError)) throw error;
+        const stats = await index.describeIndexStats();
+        if (Object.hasOwn(stats.namespaces ?? {}, workspaceId)) throw error;
+    }
 }
 
 /**
@@ -158,7 +175,7 @@ export async function deleteSourceVectors(
  */
 export async function deleteWorkspaceVectors(workspaceId: string) {
     const index = await getPineconeIndex();
-    await index.namespace(workspaceId).deleteAll();
+    await deleteFromNamespace(index, workspaceId, () => index.namespace(workspaceId).deleteAll());
 }
 
 /**
@@ -174,12 +191,15 @@ export async function queryWorkspaceVectors(
     workspaceId: string,
     vector: number[],
     topK: number,
+    sourceIds?: string[],
 ) {
+    if (sourceIds?.length === 0) return [];
     const index = await getPineconeIndex();
     const result = await index.namespace(workspaceId).query({
         vector,
         topK,
         includeMetadata: true,
+        ...(sourceIds ? { filter: { sourceId: { $in: sourceIds } } } : {}),
     });
 
     return result.matches ?? [];

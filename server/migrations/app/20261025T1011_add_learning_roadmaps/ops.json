@@ -1,0 +1,521 @@
+[
+  {
+    "id": "table.learning_roadmap",
+    "label": "Create table \"learning_roadmap\"",
+    "summary": "Creates table \"learning_roadmap\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "learning_roadmap"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure table \"learning_roadmap\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"learning_roadmap\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create table \"learning_roadmap\"",
+        "sql": "CREATE TABLE \"public\".\"learning_roadmap\" (\n  \"analysis\" json,\n  \"content\" json,\n  \"createdAt\" timestamptz DEFAULT (now()) NOT NULL,\n  \"durationMonths\" int4 NOT NULL,\n  \"generationError\" text,\n  \"id\" text NOT NULL,\n  \"limitations\" json,\n  \"phase\" text DEFAULT 'analyzing' NOT NULL,\n  \"sourceIds\" text[] NOT NULL,\n  \"status\" text DEFAULT 'generating' NOT NULL,\n  \"title\" text NOT NULL,\n  \"updatedAt\" timestamptz NOT NULL,\n  \"workspaceId\" text NOT NULL,\n  PRIMARY KEY (\"id\"),\n  CONSTRAINT \"learning_roadmap_sourceIds_elem_not_null_07253a8e\" CHECK (array_position(\"sourceIds\", NULL) IS NULL)\n)",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify table \"learning_roadmap\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"learning_roadmap\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "table.roadmap_activity",
+    "label": "Create table \"roadmap_activity\"",
+    "summary": "Creates table \"roadmap_activity\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "roadmap_activity"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure table \"roadmap_activity\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"roadmap_activity\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create table \"roadmap_activity\"",
+        "sql": "CREATE TABLE \"public\".\"roadmap_activity\" (\n  \"createdAt\" timestamptz DEFAULT (now()) NOT NULL,\n  \"id\" text NOT NULL,\n  \"kind\" text NOT NULL,\n  \"resourceId\" text,\n  \"roadmapId\" text NOT NULL,\n  \"taskId\" text,\n  PRIMARY KEY (\"id\")\n)",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify table \"roadmap_activity\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"roadmap_activity\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "table.roadmap_task_progress",
+    "label": "Create table \"roadmap_task_progress\"",
+    "summary": "Creates table \"roadmap_task_progress\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "roadmap_task_progress"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure table \"roadmap_task_progress\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"roadmap_task_progress\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create table \"roadmap_task_progress\"",
+        "sql": "CREATE TABLE \"public\".\"roadmap_task_progress\" (\n  \"completedAt\" timestamptz,\n  \"id\" text NOT NULL,\n  \"isCompleted\" bool DEFAULT false NOT NULL,\n  \"roadmapId\" text NOT NULL,\n  \"taskId\" text NOT NULL,\n  \"updatedAt\" timestamptz NOT NULL,\n  PRIMARY KEY (\"id\")\n)",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify table \"roadmap_task_progress\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"roadmap_task_progress\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "unique.roadmap_task_progress.roadmap_task_progress_roadmapId_taskId_key",
+    "label": "Add unique constraint on \"roadmap_task_progress\" (roadmapId, taskId)",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "unique",
+        "name": "roadmap_task_progress_roadmapId_taskId_key",
+        "table": "roadmap_task_progress"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure constraint \"roadmap_task_progress_roadmapId_taskId_key\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "roadmap_task_progress_roadmapId_taskId_key",
+          "public",
+          "\"public\".\"roadmap_task_progress\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add unique constraint \"roadmap_task_progress_roadmapId_taskId_key\"",
+        "sql": "ALTER TABLE \"public\".\"roadmap_task_progress\" ADD CONSTRAINT \"roadmap_task_progress_roadmapId_taskId_key\" UNIQUE (\"roadmapId\", \"taskId\")"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify constraint \"roadmap_task_progress_roadmapId_taskId_key\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "roadmap_task_progress_roadmapId_taskId_key",
+          "public",
+          "\"public\".\"roadmap_task_progress\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.learning_roadmap.learning_roadmap_workspaceId_createdAt_idx_5ff7e893",
+    "label": "Create index \"learning_roadmap_workspaceId_createdAt_idx_5ff7e893\" on \"learning_roadmap\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "learning_roadmap_workspaceId_createdAt_idx_5ff7e893",
+        "table": "learning_roadmap"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"learning_roadmap_workspaceId_createdAt_idx_5ff7e893\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"learning_roadmap_workspaceId_createdAt_idx_5ff7e893\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"learning_roadmap_workspaceId_createdAt_idx_5ff7e893\"",
+        "sql": "CREATE INDEX \"learning_roadmap_workspaceId_createdAt_idx_5ff7e893\" ON \"public\".\"learning_roadmap\" (\"workspaceId\", \"createdAt\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"learning_roadmap_workspaceId_createdAt_idx_5ff7e893\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"learning_roadmap_workspaceId_createdAt_idx_5ff7e893\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.learning_roadmap.learning_roadmap_workspaceId_idx_ba65f874",
+    "label": "Create index \"learning_roadmap_workspaceId_idx_ba65f874\" on \"learning_roadmap\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "learning_roadmap_workspaceId_idx_ba65f874",
+        "table": "learning_roadmap"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"learning_roadmap_workspaceId_idx_ba65f874\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"learning_roadmap_workspaceId_idx_ba65f874\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"learning_roadmap_workspaceId_idx_ba65f874\"",
+        "sql": "CREATE INDEX \"learning_roadmap_workspaceId_idx_ba65f874\" ON \"public\".\"learning_roadmap\" (\"workspaceId\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"learning_roadmap_workspaceId_idx_ba65f874\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"learning_roadmap_workspaceId_idx_ba65f874\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.learning_roadmap.learning_roadmap_workspaceId_status_idx_76d68132",
+    "label": "Create index \"learning_roadmap_workspaceId_status_idx_76d68132\" on \"learning_roadmap\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "learning_roadmap_workspaceId_status_idx_76d68132",
+        "table": "learning_roadmap"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"learning_roadmap_workspaceId_status_idx_76d68132\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"learning_roadmap_workspaceId_status_idx_76d68132\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"learning_roadmap_workspaceId_status_idx_76d68132\"",
+        "sql": "CREATE INDEX \"learning_roadmap_workspaceId_status_idx_76d68132\" ON \"public\".\"learning_roadmap\" (\"workspaceId\", \"status\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"learning_roadmap_workspaceId_status_idx_76d68132\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"learning_roadmap_workspaceId_status_idx_76d68132\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.roadmap_activity.roadmap_activity_roadmapId_createdAt_idx_ee1c3de0",
+    "label": "Create index \"roadmap_activity_roadmapId_createdAt_idx_ee1c3de0\" on \"roadmap_activity\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "roadmap_activity_roadmapId_createdAt_idx_ee1c3de0",
+        "table": "roadmap_activity"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"roadmap_activity_roadmapId_createdAt_idx_ee1c3de0\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"roadmap_activity_roadmapId_createdAt_idx_ee1c3de0\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"roadmap_activity_roadmapId_createdAt_idx_ee1c3de0\"",
+        "sql": "CREATE INDEX \"roadmap_activity_roadmapId_createdAt_idx_ee1c3de0\" ON \"public\".\"roadmap_activity\" (\"roadmapId\", \"createdAt\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"roadmap_activity_roadmapId_createdAt_idx_ee1c3de0\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"roadmap_activity_roadmapId_createdAt_idx_ee1c3de0\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.roadmap_activity.roadmap_activity_roadmapId_idx_be7128ae",
+    "label": "Create index \"roadmap_activity_roadmapId_idx_be7128ae\" on \"roadmap_activity\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "roadmap_activity_roadmapId_idx_be7128ae",
+        "table": "roadmap_activity"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"roadmap_activity_roadmapId_idx_be7128ae\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"roadmap_activity_roadmapId_idx_be7128ae\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"roadmap_activity_roadmapId_idx_be7128ae\"",
+        "sql": "CREATE INDEX \"roadmap_activity_roadmapId_idx_be7128ae\" ON \"public\".\"roadmap_activity\" (\"roadmapId\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"roadmap_activity_roadmapId_idx_be7128ae\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"roadmap_activity_roadmapId_idx_be7128ae\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.roadmap_task_progress.roadmap_task_progress_roadmapId_idx_be7128ae",
+    "label": "Create index \"roadmap_task_progress_roadmapId_idx_be7128ae\" on \"roadmap_task_progress\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "roadmap_task_progress_roadmapId_idx_be7128ae",
+        "table": "roadmap_task_progress"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"roadmap_task_progress_roadmapId_idx_be7128ae\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"roadmap_task_progress_roadmapId_idx_be7128ae\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"roadmap_task_progress_roadmapId_idx_be7128ae\"",
+        "sql": "CREATE INDEX \"roadmap_task_progress_roadmapId_idx_be7128ae\" ON \"public\".\"roadmap_task_progress\" (\"roadmapId\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"roadmap_task_progress_roadmapId_idx_be7128ae\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"roadmap_task_progress_roadmapId_idx_be7128ae\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.learning_roadmap.learning_roadmap_workspaceId_fkey",
+    "label": "Add foreign key \"learning_roadmap_workspaceId_fkey\" on \"learning_roadmap\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "learning_roadmap_workspaceId_fkey",
+        "table": "learning_roadmap"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"learning_roadmap_workspaceId_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "learning_roadmap_workspaceId_fkey",
+          "public",
+          "\"public\".\"learning_roadmap\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"learning_roadmap_workspaceId_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"learning_roadmap\"\nADD CONSTRAINT \"learning_roadmap_workspaceId_fkey\"\nFOREIGN KEY (\"workspaceId\")\nREFERENCES \"public\".\"workspace\" (\"id\")\nON DELETE CASCADE"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"learning_roadmap_workspaceId_fkey\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "learning_roadmap_workspaceId_fkey",
+          "public",
+          "\"public\".\"learning_roadmap\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.roadmap_activity.roadmap_activity_roadmapId_fkey",
+    "label": "Add foreign key \"roadmap_activity_roadmapId_fkey\" on \"roadmap_activity\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "roadmap_activity_roadmapId_fkey",
+        "table": "roadmap_activity"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"roadmap_activity_roadmapId_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "roadmap_activity_roadmapId_fkey",
+          "public",
+          "\"public\".\"roadmap_activity\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"roadmap_activity_roadmapId_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"roadmap_activity\"\nADD CONSTRAINT \"roadmap_activity_roadmapId_fkey\"\nFOREIGN KEY (\"roadmapId\")\nREFERENCES \"public\".\"learning_roadmap\" (\"id\")\nON DELETE CASCADE"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"roadmap_activity_roadmapId_fkey\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "roadmap_activity_roadmapId_fkey",
+          "public",
+          "\"public\".\"roadmap_activity\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.roadmap_task_progress.roadmap_task_progress_roadmapId_fkey",
+    "label": "Add foreign key \"roadmap_task_progress_roadmapId_fkey\" on \"roadmap_task_progress\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "roadmap_task_progress_roadmapId_fkey",
+        "table": "roadmap_task_progress"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"roadmap_task_progress_roadmapId_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "roadmap_task_progress_roadmapId_fkey",
+          "public",
+          "\"public\".\"roadmap_task_progress\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"roadmap_task_progress_roadmapId_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"roadmap_task_progress\"\nADD CONSTRAINT \"roadmap_task_progress_roadmapId_fkey\"\nFOREIGN KEY (\"roadmapId\")\nREFERENCES \"public\".\"learning_roadmap\" (\"id\")\nON DELETE CASCADE"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"roadmap_task_progress_roadmapId_fkey\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "roadmap_task_progress_roadmapId_fkey",
+          "public",
+          "\"public\".\"roadmap_task_progress\""
+        ]
+      }
+    ]
+  }
+]
