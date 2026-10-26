@@ -21,9 +21,38 @@ Neo-brutalist design. Light and dark themes. Mobile, tablet, and desktop layouts
 
 ### Under the hood
 
-**Next.js · React · TypeScript · TanStack Query · Express · PostgreSQL · Prisma 8**
+**The interface**
 
-OpenAI powers generation, Pinecone handles vector retrieval, and Inngest runs background jobs. Better Auth handles sign-in; Cloudinary, Firecrawl, Tavily, and Mem0 support storage, extraction, research, and memory.
+![Next.js](https://img.shields.io/badge/Next.js-20211F?style=flat-square)
+![React](https://img.shields.io/badge/React-C4DFEC?style=flat-square)
+![TypeScript](https://img.shields.io/badge/TypeScript-D9CDF2?style=flat-square)
+![TanStack Query](https://img.shields.io/badge/TanStack_Query-F4BFD1?style=flat-square)
+![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-D3E6BD?style=flat-square)
+![React Flow](https://img.shields.io/badge/React_Flow-F5ED8C?style=flat-square)
+
+**The foundation**
+
+![Node.js](https://img.shields.io/badge/Node.js-D3E6BD?style=flat-square)
+![Express](https://img.shields.io/badge/Express-20211F?style=flat-square)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-C4DFEC?style=flat-square)
+![Prisma 8](https://img.shields.io/badge/Prisma_8-D9CDF2?style=flat-square)
+![Better Auth](https://img.shields.io/badge/Better_Auth-F5ED8C?style=flat-square)
+
+**The intelligence**
+
+![OpenAI](https://img.shields.io/badge/OpenAI-D3E6BD?style=flat-square)
+![AI SDK](https://img.shields.io/badge/AI_SDK-20211F?style=flat-square)
+![Pinecone](https://img.shields.io/badge/Pinecone-C4DFEC?style=flat-square)
+![Mem0](https://img.shields.io/badge/Mem0-F4BFD1?style=flat-square)
+
+**The supporting cast**
+
+![Inngest](https://img.shields.io/badge/Inngest-F3D3A6?style=flat-square)
+![Cloudinary](https://img.shields.io/badge/Cloudinary-C4DFEC?style=flat-square)
+![Firecrawl](https://img.shields.io/badge/Firecrawl-F4BFD1?style=flat-square)
+![Tavily](https://img.shields.io/badge/Tavily-D9CDF2?style=flat-square)
+
+Source-grounded answers. Persistent memory. Background processing that keeps the learning flowing.
 
 ### Run locally
 
